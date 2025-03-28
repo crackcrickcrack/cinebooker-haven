@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,6 +53,45 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				cinema: {
+					"50": "#f5f3ff",
+					"100": "#ede8ff",
+					"200": "#d9d0ff",
+					"300": "#bca8ff",
+					"400": "#9a7aff",
+					"500": "#7c43ff",
+					"600": "#6d28d9",
+					"700": "#5b21b6",
+					"800": "#4c1d95",
+					"900": "#3e1f6c",
+					"950": "#2e1065",
+				},
+				teal: {
+					"50": "#f0fdfa",
+					"100": "#ccfbf1",
+					"200": "#99f6e4",
+					"300": "#5eead4",
+					"400": "#2dd4bf",
+					"500": "#14b8a6",
+					"600": "#0d9488",
+					"700": "#0f766e",
+					"800": "#115e59",
+					"900": "#134e4a",
+					"950": "#042f2e",
+				},
+				gold: {
+					"50": "#fffbeb",
+					"100": "#fef3c7",
+					"200": "#fde68a",
+					"300": "#fcd34d",
+					"400": "#fbbf24",
+					"500": "#f59e0b",
+					"600": "#d97706",
+					"700": "#b45309",
+					"800": "#92400e",
+					"900": "#78350f",
+					"950": "#451a03",
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +124,40 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'poster-hover': {
+					'0%': {
+						transform: 'scale(1)'
+					},
+					'100%': {
+						transform: 'scale(1.05)'
+					}
+				},
+				'shimmer': {
+					'0%': {
+						backgroundPosition: '-200% 0'
+					},
+					'100%': {
+						backgroundPosition: '200% 0'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out forwards',
+				'poster-hover': 'poster-hover 0.3s ease-out forwards',
+				'shimmer': 'shimmer 2s infinite linear'
 			}
 		}
 	},
