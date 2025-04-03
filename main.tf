@@ -293,6 +293,15 @@ resource "aws_instance" "k3s_argocd" {
               sleep 30
               kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d > /home/ubuntu/argocd-password.txt
               chown ubuntu:ubuntu /home/ubuntu/argocd-password.txt
+              sudo apt install docker.io -y
+
+              # Start and enable Docker service
+              sudo systemctl start docker
+              sudo systemctl enable docker
+
+              #grant access to your user to run the docker command, you should add the user to the Docker Linux group. Docker group is create by default when docker is installed.
+
+              sudo usermod -aG docker ubuntu
               EOF
 
   tags = {
@@ -333,6 +342,13 @@ resource "aws_security_group" "k3s_argocd" {
   ingress {
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 30000
+    to_port     = 32767
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
