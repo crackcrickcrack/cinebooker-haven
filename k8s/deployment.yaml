@@ -1,8 +1,8 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cinebooker
+  namespace: cinebooker
   labels:
     app: cinebooker
 spec:
@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: cinebooker
-        image: docker.io/yourusername/cinebooker:latest
+        image: docker.io/sandeepkalathil/cinebooker:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
