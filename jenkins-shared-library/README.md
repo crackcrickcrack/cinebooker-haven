@@ -1,3 +1,4 @@
+
 # Jenkins Shared Library for CineBooker
 
 This shared library contains reusable pipeline steps for the CineBooker CI/CD pipeline.
@@ -11,6 +12,32 @@ This shared library contains reusable pipeline steps for the CineBooker CI/CD pi
   - `pushToDockerHub.groovy`: Pushes images to Docker Hub
   - `updateArgoCD.groovy`: Notifies ArgoCD about new images
   - `cleanup.groovy`: Cleans up resources after pipeline execution
+
+## Required Jenkins Plugins
+
+For this shared library to work correctly, you need the following plugins installed on your Jenkins master:
+
+1. **Pipeline plugins**:
+   - Pipeline
+   - Pipeline: API
+   - Pipeline: Basic Steps
+   - Pipeline: Groovy
+   - Pipeline: Job
+   - Pipeline: Stage Step
+
+2. **Docker integration**:
+   - Docker
+   - Docker Pipeline
+
+3. **SonarQube integration**:
+   - SonarQube Scanner
+
+4. **Credential management**:
+   - Credentials Binding
+
+5. **Reporting plugins**:
+   - JUnit
+   - HTML Publisher
 
 ## Usage
 
@@ -51,3 +78,4 @@ To add new functionality:
 2. Define a `call()` method with any necessary parameters
 3. Implement the functionality you need
 4. Commit and push to the shared library repository
+

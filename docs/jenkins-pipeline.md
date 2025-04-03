@@ -12,6 +12,51 @@ This guide describes how to set up and use the Jenkins pipeline for CineBooker's
 - Access to Docker Hub or another container registry
 - Kubernetes cluster with ArgoCD installed
 
+## Required Jenkins Plugins
+
+The following plugins need to be installed on your Jenkins master:
+
+1. **Pipeline plugins**:
+   - Pipeline
+   - Pipeline: API
+   - Pipeline: Basic Steps
+   - Pipeline: Groovy
+   - Pipeline: Job
+   - Pipeline: Stage Step
+   - Pipeline: Stage View
+   - Pipeline: REST API
+
+2. **Git integration**:
+   - Git
+   - Git Client
+   - GitHub Integration
+
+3. **Docker integration**:
+   - Docker
+   - Docker Pipeline
+   - Docker API
+
+4. **Build tools & integration**:
+   - NodeJS
+   - SonarQube Scanner
+
+5. **Credential management**:
+   - Credentials
+   - Credentials Binding
+
+6. **Workspace management**:
+   - Workspace Cleanup
+
+7. **Test & reporting**:
+   - JUnit
+   - HTML Publisher
+
+8. **UI & visualization**:
+   - Blue Ocean (optional but recommended for better pipeline visualization)
+
+9. **Agent management**:
+   - SSH Build Agents
+
 ## Setting Up Jenkins Pipeline
 
 ### 1. Prerequisites Configuration
@@ -48,7 +93,13 @@ Configure the following parameters:
 - `SONAR_PROJECT_KEY`: SonarQube project key (default: `cinebooker`)
 - `ARGOCD_UPDATER_URL`: ArgoCD Image Updater URL
 
-### 5. Run the pipeline
+### 5. Tool Configuration
+
+In "Manage Jenkins" > "Global Tool Configuration":
+1. Configure NodeJS installation
+2. Configure SonarQube Scanner
+
+### 6. Run the pipeline
 
 The pipeline will:
 - Check out code from the git repository
@@ -78,3 +129,4 @@ If the pipeline fails:
 3. Ensure Jenkins has sufficient permissions to access required resources
 4. Check that all required tools (Node.js, Docker, etc.) are properly installed
 5. Verify connectivity to external services (SonarQube, Docker Hub, ArgoCD)
+
