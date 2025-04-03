@@ -286,7 +286,7 @@ resource "aws_instance" "k3s_argocd" {
               kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
 
               # Expose ArgoCD server
-              kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+              kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer", "ports": [{"port": 8081, "targetPort": 8080, "name": "http"}, {"port": 8443, "targetPort": 443, "name": "https"}]}}'
 
               # Get ArgoCD admin password and save it to a file
               echo "Waiting for ArgoCD password to be available..."
