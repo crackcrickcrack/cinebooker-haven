@@ -6,8 +6,8 @@ import { movies } from '@/data/mockData';
 import { CalendarIcon } from 'lucide-react';
 
 const ComingSoon = () => {
-  // Filter movies to show only upcoming ones (for demo purposes, using the last 6 movies)
-  const upcomingMovies = movies.slice(5);
+  // Use all the upcoming movies (movies from id 9 onward)
+  const upcomingMovies = movies.slice(9);
   
   return (
     <AppLayout>

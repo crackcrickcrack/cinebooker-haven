@@ -12,9 +12,9 @@ const Index = () => {
   // For the hero section, we'll use the first movie
   const featuredMovie = movies[0];
   
-  // Divide the remaining movies into "Now Playing" and "Coming Soon"
-  const nowPlaying = movies.slice(1, 5);
-  const comingSoon = movies.slice(5);
+  // Divide the movies into "Now Playing" and "Coming Soon"
+  const nowPlaying = movies.slice(1, 9); // More movies for Now Playing
+  const comingSoon = movies.slice(9); // More movies for Coming Soon
   
   return (
     <AppLayout>
