@@ -6,7 +6,7 @@ metadata:
   namespace: cinebooker
   
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
   - host: cinebooker.duckdns.org
     http:
