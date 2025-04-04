@@ -144,7 +144,7 @@ export const movies: Movie[] = [
   {
     id: "11",
     title: "Neon Dynasty",
-    posterUrl: "https://images.unsplash.com/photo-1611215587179-c84d39fcc7f3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1vdmllJTIwcG9zdGVyfGVufDB8fDB8fHww",
+    posterUrl: "https://unsplash.com/photos/a-neon-lit-neon-store-front-at-night-LoeVFJR1Py8",
     backdropUrl: "https://images.unsplash.com/photo-1610296669228-602fa827fc1f?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y3liZXJwdW5rfGVufDB8fDB8fHww",
     releaseDate: "2025-08-01",
     duration: 158,
@@ -158,7 +158,7 @@ export const movies: Movie[] = [
   {
     id: "12",
     title: "Emerald Kingdom",
-    posterUrl: "https://images.unsplash.com/photo-1594739297261-4e0533e87938?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fG1vdmllJTIwcG9zdGVyfGVufDB8fDB8fHww",
+    posterUrl: "https://unsplash.com/photos/a-model-of-a-city-with-a-clock-tower-NxxZJ_UT0SU",
     backdropUrl: "https://images.unsplash.com/photo-1520962880247-cfaf541c8724?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8anVuZ2xlfGVufDB8fDB8fHww",
     releaseDate: "2025-07-12",
     duration: 136,
@@ -172,7 +172,7 @@ export const movies: Movie[] = [
   {
     id: "13",
     title: "Silent Symphony",
-    posterUrl: "https://images.unsplash.com/photo-1614846384571-1e31fc155824?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fG1vdmllJTIwcG9zdGVyfGVufDB8fDB8fHww",
+    posterUrl: "https://unsplash.com/photos/purple-flower-on-white-printer-paper-ECI6l_JwOew",
     backdropUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bXVzaWNpYW58ZW58MHx8MHx8fDA%3D",
     releaseDate: "2025-09-05",
     duration: 127,
