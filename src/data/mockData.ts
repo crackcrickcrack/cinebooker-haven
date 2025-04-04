@@ -1,4 +1,3 @@
-
 import { Movie, Showtime, Theater } from "@/types/cinema";
 
 export const movies: Movie[] = [
@@ -86,7 +85,6 @@ export const movies: Movie[] = [
     cast: ["Toni Collette", "Florence Pugh", "Willem Dafoe"],
     trailerUrl: "https://www.youtube.com/watch?v=2LqzF5WauAw"
   },
-  // Adding new movies for Now Playing
   {
     id: "7",
     title: "Crimson Tide",
@@ -129,7 +127,6 @@ export const movies: Movie[] = [
     cast: ["Idris Elba", "Lupita Nyong'o", "Michael Fassbender"],
     trailerUrl: "https://www.youtube.com/watch?v=2LqzF5WauAw"
   },
-  // Adding more upcoming movies
   {
     id: "10",
     title: "Eternal Winter",
@@ -330,7 +327,6 @@ export const showtimes: Showtime[] = [
   }
 ];
 
-// Helper function to generate seats layout
 function generateSeatsLayout(startRow: string, endRow: string, seatsPerRow: number, premiumRows: number): any[] {
   const rows: any[] = [];
   const startCharCode = startRow.charCodeAt(0);
@@ -358,22 +354,18 @@ function generateSeatsLayout(startRow: string, endRow: string, seatsPerRow: numb
   return rows;
 }
 
-// Helper function to get movie by id
 export function getMovieById(id: string): Movie | undefined {
   return movies.find(movie => movie.id === id);
 }
 
-// Helper function to get theater by id
 export function getTheaterById(id: string): Theater | undefined {
   return theaters.find(theater => theater.id === id);
 }
 
-// Helper function to get showtimes by movie id
 export function getShowtimesByMovieId(movieId: string): Showtime[] {
   return showtimes.filter(showtime => showtime.movieId === movieId);
 }
 
-// Helper function to get showtime by id
 export function getShowtimeById(id: string): Showtime | undefined {
   return showtimes.find(showtime => showtime.id === id);
 }

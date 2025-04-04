@@ -15,6 +15,10 @@ import Booking from "./pages/Booking";
 import Bookings from "./pages/Bookings";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import Faq from "./pages/Faq";
+import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -37,6 +41,10 @@ const App: React.FC = () => {
               <Route path="/booking/:id" element={<Booking />} />
               <Route path="/bookings" element={<Bookings />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
