@@ -1,3 +1,4 @@
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -17,7 +18,3 @@ spec:
             name: cinebooker
             port:
               number: 80
-  tls:
-  - hosts:
-    - cinebooker.duckdns.org
-    secretName: cinebooker-tls
