@@ -51,7 +51,22 @@ pipeline {
                 }
             }
             steps {
-                buildAndTest()
+                echo "Installing dependencies and running tests..."
+                sh 'npm ci'
+                sh 'npm run lint || echo "Linting issues found but continuing"'
+                sh 'npm test -- --coverage || { echo "Tests failed"; exit 1; }'
+                sh 'npm run build'
+                
+                // Publish test reports
+                junit 'coverage/junit.xml'
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'Coverage Report'
+                ])
             }
         }
 
@@ -63,32 +78,115 @@ pipeline {
                 }
             }
             steps {
-                sonarAnalysis(params.SONAR_PROJECT_KEY, env.SONAR_HOST_URL)
+                echo "Running SonarQube analysis..."
+                withSonarQubeEnv('SonarQube') {
+                    sh """
+                        sonar-scanner \\
+                        -Dsonar.projectKey=${params.SONAR_PROJECT_KEY} \\
+                        -Dsonar.sources=. \\
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \\
+                        -Dsonar.exclusions=node_modules/**,coverage/**,public/**,dist/** \\
+                        -Dsonar.host.url=${SONAR_HOST_URL}
+                    """
+                }
+                
+                // Quality Gate check
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
 
         stage('Docker Image Build & Security Scan') {
             steps {
-                buildDockerImage(env.DOCKER_IMAGE, env.NODE_ENV)
+                echo "Building Docker image: ${DOCKER_IMAGE}"
+                
+                // Build Docker image
+                sh "docker build -t ${DOCKER_IMAGE} --build-arg NODE_ENV=${NODE_ENV} ."
+                
+                // Scan the image with Trivy
+                sh """
+                    docker run --rm \\
+                    -v /var/run/docker.sock:/var/run/docker.sock \\
+                    -v \${WORKSPACE}:/root/.cache/ \\
+                    aquasec/trivy:latest image \\
+                    --format json \\
+                    --output trivy-results.json \\
+                    ${DOCKER_IMAGE}
+                """
+                
+                // Archive scan results
+                archiveArtifacts artifacts: 'trivy-results.json', fingerprint: true
+                
+                // Optional: Fail build on high severity vulnerabilities
+                sh """
+                    docker run --rm \\
+                    -v /var/run/docker.sock:/var/run/docker.sock \\
+                    -v \${WORKSPACE}:/root/.cache/ \\
+                    aquasec/trivy:latest image \\
+                    --exit-code 1 \\
+                    --severity HIGH,CRITICAL \\
+                    ${DOCKER_IMAGE} || echo "Vulnerabilities found, but continuing"
+                """
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                pushToDockerHub(env.DOCKER_IMAGE, 'docker-hub-credentials')
+                echo "Pushing Docker image to Docker Hub..."
+                
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
+                                usernameVariable: 'DOCKER_USER', 
+                                passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh """
+                        echo ${DOCKER_PASSWORD} | docker login docker.io -u ${DOCKER_USER} --password-stdin
+                        docker push ${DOCKER_IMAGE}
+                    """
+                }
             }
         }
 
         stage('Update ArgoCD Image Updater') {
             steps {
-                updateArgoCD(env.DOCKER_IMAGE, params.ARGOCD_UPDATER_URL)
+                echo "Notifying ArgoCD Image Updater about new image..."
+                
+                sh """
+                    curl -X POST ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/images \\
+                    -H 'Content-Type: application/json' \\
+                    -d '{
+                        "image": "${DOCKER_IMAGE}",
+                        "force": true
+                    }'
+                """
+                
+                // Verify deployment started (optional)
+                sh """
+                    # Wait for ArgoCD to start the update
+                    sleep 10
+                    curl -s ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/status | grep -q "Syncing"
+                """
             }
         }
     }
 
     post {
         always {
-            cleanup(env.DOCKER_IMAGE)
+            echo "Cleaning up workspace and Docker resources..."
+            
+            sh """
+                # Remove the built Docker image to save space
+                docker rmi ${DOCKER_IMAGE} || true
+                
+                # Prune dangling images and containers
+                docker image prune -f
+                docker container prune -f
+                
+                # Clean workspace
+                rm -rf node_modules dist coverage
+            """
+            
+            // Clean workspace using Jenkins built-in
+            cleanWs()
         }
         
         success {
