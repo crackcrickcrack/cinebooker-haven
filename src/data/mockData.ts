@@ -144,7 +144,7 @@ export const movies: Movie[] = [
   {
     id: "11",
     title: "Neon Dynasty",
-    posterUrl: https://images.unsplash.com/photo-1635552322112-0194846b0d75?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    posterUrl: "https://images.unsplash.com/photo-1635552322112-0194846b0d75?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     backdropUrl: "https://images.unsplash.com/photo-1610296669228-602fa827fc1f?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y3liZXJwdW5rfGVufDB8fDB8fHww",
     releaseDate: "2025-08-01",
     duration: 158,
