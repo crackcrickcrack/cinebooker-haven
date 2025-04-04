@@ -31,10 +31,27 @@ This creates an Application resource in ArgoCD that defines what to deploy and w
 ### 3. Monitor the deployment in ArgoCD UI
 
 ```bash
-# Port forward to access ArgoCD UI
-kubectl port-forward svc/argocd-server -n argocd 8080:443
+#  edit the service directly to safely change the ports
+kubectl edit svc argocd-server -n argocd
+This opens the service in your default text editor (usually Vim). Now:
 
-# Access the UI at http://localhost:8080
+Find this block under spec.ports::
+Change it to:
+
+  ports:
+  - name: http
+    port: 8081
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: 8080
+
+# Port forward to access ArgoCD UI
+kubectl port-forward service/argocd-server -n argocd 8081:8081 --address 0.0.0.0
+
+# Access the UI at http://<IP_ADD>:8081
 # Default credentials: username: admin, password: (can be obtained with:)
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
