@@ -144,7 +144,7 @@ export const movies: Movie[] = [
   {
     id: "11",
     title: "Neon Dynasty",
-    posterUrl: "https://unsplash.com/photos/a-neon-lit-neon-store-front-at-night-LoeVFJR1Py8",
+    posterUrl: https://images.unsplash.com/photo-1635552322112-0194846b0d75?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     backdropUrl: "https://images.unsplash.com/photo-1610296669228-602fa827fc1f?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y3liZXJwdW5rfGVufDB8fDB8fHww",
     releaseDate: "2025-08-01",
     duration: 158,
@@ -158,7 +158,7 @@ export const movies: Movie[] = [
   {
     id: "12",
     title: "Emerald Kingdom",
-    posterUrl: "https://unsplash.com/photos/a-model-of-a-city-with-a-clock-tower-NxxZJ_UT0SU",
+    posterUrl: "https://images.unsplash.com/photo-1740511085476-797f5ef848cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     backdropUrl: "https://images.unsplash.com/photo-1520962880247-cfaf541c8724?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8anVuZ2xlfGVufDB8fDB8fHww",
     releaseDate: "2025-07-12",
     duration: 136,
@@ -172,7 +172,7 @@ export const movies: Movie[] = [
   {
     id: "13",
     title: "Silent Symphony",
-    posterUrl: "https://unsplash.com/photos/purple-flower-on-white-printer-paper-ECI6l_JwOew",
+    posterUrl: "https://images.unsplash.com/photo-1620754733890-75a20f393d01?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     backdropUrl: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bXVzaWNpYW58ZW58MHx8MHx8fDA%3D",
     releaseDate: "2025-09-05",
     duration: 127,
