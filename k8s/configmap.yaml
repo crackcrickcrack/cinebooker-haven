@@ -4,5 +4,5 @@ kind: ConfigMap
 metadata:
   name: cinebooker-config
 data:
-  NGINX_HOST: "cinebooker.yourdomain.com"
+  NGINX_HOST: "cinebooker.duckdns.org"
   NGINX_PORT: "80"
