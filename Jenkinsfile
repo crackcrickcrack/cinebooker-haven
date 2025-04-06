@@ -46,12 +46,13 @@ pipeline {
         stage('Build & Test') {
             agent {
                 docker {
-                    image 'node:18'
+                    image 'node:22-alpine'
                     reuseNode true
                 }
             }
             steps {
                 echo "Installing dependencies and running tests..."
+                sh 'npm install'
                 sh 'npm ci --production=false'
                 sh 'npm run lint || echo "Linting issues found but continuing"'
                 sh 'npm test -- --coverage || { echo "Tests failed"; exit 1; }'
