@@ -36,7 +36,7 @@ pipeline {
                     extensions: [],
                     submoduleCfg: [],
                     userRemoteConfigs: [[
-                        url: 'https://github.com/yourusername/cinebooker.git',
+                        url: 'https://github.com/crackcrickcrack/cinebooker-haven',
                         credentialsId: 'github-credentials'
                     ]]
                 ])
