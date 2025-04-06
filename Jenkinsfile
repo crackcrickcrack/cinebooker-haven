@@ -1,3 +1,4 @@
+
 pipeline {
     agent {
         node {
@@ -24,7 +25,9 @@ pipeline {
     stages {
         stage('Code Checkout') {
             steps {
+                // Clean workspace before checkout
                 cleanWs()
+                
                 echo "Checking out code from branch: ${params.BRANCH_NAME}"
                 checkout([
                     $class: 'GitSCM',
@@ -48,7 +51,22 @@ pipeline {
                 }
             }
             steps {
-                buildAndTest()
+                echo "Installing dependencies and running tests..."
+                sh 'npm ci'
+                sh 'npm run lint || echo "Linting issues found but continuing"'
+                sh 'npm test -- --coverage || { echo "Tests failed"; exit 1; }'
+                sh 'npm run build'
+                
+                // Publish test reports
+                junit 'coverage/junit.xml'
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'Coverage Report'
+                ])
             }
         }
 
@@ -71,6 +89,8 @@ pipeline {
                         -Dsonar.host.url=${SONAR_HOST_URL}
                     """
                 }
+                
+                // Quality Gate check
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
@@ -80,7 +100,11 @@ pipeline {
         stage('Docker Image Build & Security Scan') {
             steps {
                 echo "Building Docker image: ${DOCKER_IMAGE}"
+                
+                // Build Docker image
                 sh "docker build -t ${DOCKER_IMAGE} --build-arg NODE_ENV=${NODE_ENV} ."
+                
+                // Scan the image with Trivy
                 sh """
                     docker run --rm \\
                     -v /var/run/docker.sock:/var/run/docker.sock \\
@@ -90,7 +114,11 @@ pipeline {
                     --output trivy-results.json \\
                     ${DOCKER_IMAGE}
                 """
+                
+                // Archive scan results
                 archiveArtifacts artifacts: 'trivy-results.json', fingerprint: true
+                
+                // Optional: Fail build on high severity vulnerabilities
                 sh """
                     docker run --rm \\
                     -v /var/run/docker.sock:/var/run/docker.sock \\
@@ -106,6 +134,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 echo "Pushing Docker image to Docker Hub..."
+                
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
                                 usernameVariable: 'DOCKER_USER', 
                                 passwordVariable: 'DOCKER_PASSWORD')]) {
@@ -120,6 +149,7 @@ pipeline {
         stage('Update ArgoCD Image Updater') {
             steps {
                 echo "Notifying ArgoCD Image Updater about new image..."
+                
                 sh """
                     curl -X POST ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/images \\
                     -H 'Content-Type: application/json' \\
@@ -128,7 +158,10 @@ pipeline {
                         "force": true
                     }'
                 """
+                
+                // Verify deployment started (optional)
                 sh """
+                    # Wait for ArgoCD to start the update
                     sleep 10
                     curl -s ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/status | grep -q "Syncing"
                 """
@@ -139,21 +172,31 @@ pipeline {
     post {
         always {
             echo "Cleaning up workspace and Docker resources..."
+            
             sh """
+                # Remove the built Docker image to save space
                 docker rmi ${DOCKER_IMAGE} || true
+                
+                # Prune dangling images and containers
                 docker image prune -f
                 docker container prune -f
+                
+                # Clean workspace
                 rm -rf node_modules dist coverage
             """
+            
+            // Clean workspace using Jenkins built-in
             cleanWs()
         }
         
         success {
             echo "Pipeline completed successfully!"
+            // You can add notification steps here (Slack, Email, etc.)
         }
         
         failure {
             echo "Pipeline failed!"
+            // You can add notification steps here (Slack, Email, etc.)
         }
     }
 }
