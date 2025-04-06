@@ -4,8 +4,10 @@
 def call() {
     echo "Installing dependencies and running tests..."
     sh 'npm ci'
-    sh 'npm run lint || echo "Linting issues found but continuing"'
-    sh 'npm test -- --coverage || { echo "Tests failed"; exit 1; }'
+    
+    // Updated commands to use npx to run locally installed binaries
+    sh 'npx eslint . || echo "Linting issues found but continuing"'
+    sh 'npx vitest run --coverage || { echo "Tests failed"; exit 1; }'
     sh 'npm run build'
     
     // Publish test reports
