@@ -10,7 +10,7 @@ pipeline {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
         string(name: 'DOCKER_TAG', defaultValue: 'latest', description: 'Docker image tag')
         string(name: 'DOCKER_REGISTRY', defaultValue: 'docker.io', description: 'Docker registry')
-        string(name: 'DOCKER_REPO', defaultValue: 'yourusername/cinebooker', description: 'Docker repository')
+        string(name: 'DOCKER_REPO', defaultValue: 'sandeepkalathil/cinebooker', description: 'Docker repository')
         string(name: 'SONAR_PROJECT_KEY', defaultValue: 'cinebooker', description: 'SonarQube project key')
         string(name: 'ARGOCD_UPDATER_URL', defaultValue: 'http://argocd-image-updater.argocd:8080', description: 'ArgoCD Image Updater URL')
     }
