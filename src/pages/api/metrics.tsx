@@ -1,36 +1,31 @@
 
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import metricsService from '@/services/metricsService';
 
 const MetricsEndpoint: React.FC = () => {
-  const navigate = useNavigate();
+  const [metricsData, setMetricsData] = useState<string>("");
   
   useEffect(() => {
-    const fetchAndReturnMetrics = async () => {
+    const fetchMetrics = async () => {
       try {
         const metrics = await metricsService.getMetrics();
-        
-        // Create a plain text response
-        const blob = new Blob([metrics], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        
-        // Open the metrics in a new tab
-        window.open(url);
-        
-        // Navigate back to the previous page
-        navigate(-1);
+        setMetricsData(metrics);
       } catch (error) {
         console.error('Error fetching metrics:', error);
-        navigate(-1);
+        setMetricsData("Error fetching metrics");
       }
     };
     
-    fetchAndReturnMetrics();
-  }, [navigate]);
+    fetchMetrics();
+  }, []);
   
   return (
-    <div>Loading metrics...</div>
+    <div>
+      <h1>Prometheus Metrics</h1>
+      <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '4px' }}>
+        {metricsData}
+      </pre>
+    </div>
   );
 };
 

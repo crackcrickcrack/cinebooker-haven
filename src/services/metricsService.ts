@@ -1,91 +1,32 @@
 
-import { Counter, Gauge, Histogram, Registry } from 'prom-client';
+// Browser-compatible metrics service
+// Instead of using prom-client which requires Node.js process object,
+// we'll implement a simpler metrics collection approach
 
-// Create a Registry to register metrics
-const register = new Registry();
-
-// Initialize metrics for the application
-export class MetricsService {
+class MetricsService {
   private static instance: MetricsService;
   
-  // Page views counter per route
-  private pageViewsCounter: Counter;
-  
-  // API request duration histogram
-  private apiRequestDuration: Histogram;
-  
-  // Active user sessions gauge
-  private activeUserSessions: Gauge;
-  
-  // Request errors counter
-  private requestErrors: Counter;
-  
-  // Movie bookings counter
-  private movieBookings: Counter;
-  
-  // Application load time histogram
-  private appLoadTime: Histogram;
-  
-  // Component render time histogram
-  private componentRenderTime: Histogram;
+  // Store metrics in memory
+  private metrics: {
+    pageViews: { [route: string]: number };
+    apiRequestDurations: { endpoint: string; method: string; status: string; duration: number }[];
+    activeUserSessions: number;
+    requestErrors: { route: string; errorType: string }[];
+    movieBookings: { movieId: string; theaterId: string }[];
+    appLoadTime: number[];
+    componentRenderTimes: { component: string; duration: number }[];
+  };
 
   private constructor() {
-    // Initialize page views counter
-    this.pageViewsCounter = new Counter({
-      name: 'cinebooker_page_views_total',
-      help: 'Total number of page views',
-      labelNames: ['route'],
-      registers: [register]
-    });
-
-    // Initialize API request duration histogram
-    this.apiRequestDuration = new Histogram({
-      name: 'cinebooker_api_request_duration_seconds',
-      help: 'Duration of API requests in seconds',
-      labelNames: ['endpoint', 'method', 'status'],
-      buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10],
-      registers: [register]
-    });
-
-    // Initialize active user sessions gauge
-    this.activeUserSessions = new Gauge({
-      name: 'cinebooker_active_user_sessions',
-      help: 'Number of active user sessions',
-      registers: [register]
-    });
-
-    // Initialize request errors counter
-    this.requestErrors = new Counter({
-      name: 'cinebooker_request_errors_total',
-      help: 'Total number of request errors',
-      labelNames: ['route', 'error_type'],
-      registers: [register]
-    });
-
-    // Initialize movie bookings counter
-    this.movieBookings = new Counter({
-      name: 'cinebooker_movie_bookings_total',
-      help: 'Total number of movie bookings',
-      labelNames: ['movie_id', 'theater_id'],
-      registers: [register]
-    });
-
-    // Initialize app load time histogram
-    this.appLoadTime = new Histogram({
-      name: 'cinebooker_app_load_time_seconds',
-      help: 'Application load time in seconds',
-      buckets: [0.1, 0.5, 1, 2, 5],
-      registers: [register]
-    });
-
-    // Initialize component render time histogram
-    this.componentRenderTime = new Histogram({
-      name: 'cinebooker_component_render_time_seconds',
-      help: 'Component render time in seconds',
-      labelNames: ['component'],
-      buckets: [0.01, 0.05, 0.1, 0.5, 1],
-      registers: [register]
-    });
+    this.metrics = {
+      pageViews: {},
+      apiRequestDurations: [],
+      activeUserSessions: 0,
+      requestErrors: [],
+      movieBookings: [],
+      appLoadTime: [],
+      componentRenderTimes: [],
+    };
   }
 
   public static getInstance(): MetricsService {
@@ -97,52 +38,168 @@ export class MetricsService {
 
   // Record a page view for a specific route
   public recordPageView(route: string): void {
-    this.pageViewsCounter.inc({ route });
+    if (!this.metrics.pageViews[route]) {
+      this.metrics.pageViews[route] = 0;
+    }
+    this.metrics.pageViews[route]++;
+    console.log(`Page view recorded for ${route}`);
   }
 
   // Record API request duration
   public recordApiRequestDuration(endpoint: string, method: string, status: string, duration: number): void {
-    this.apiRequestDuration.observe({ endpoint, method, status }, duration);
+    this.metrics.apiRequestDurations.push({ endpoint, method, status, duration });
+    console.log(`API request recorded: ${method} ${endpoint} ${status} ${duration.toFixed(3)}s`);
   }
 
   // Update active user sessions count
   public setActiveUserSessions(count: number): void {
-    this.activeUserSessions.set(count);
+    this.metrics.activeUserSessions = count;
   }
 
   // Increment active user sessions
   public incrementActiveUserSessions(): void {
-    this.activeUserSessions.inc();
+    this.metrics.activeUserSessions++;
+    console.log(`Active sessions: ${this.metrics.activeUserSessions}`);
   }
 
   // Decrement active user sessions
   public decrementActiveUserSessions(): void {
-    this.activeUserSessions.dec();
+    this.metrics.activeUserSessions--;
+    if (this.metrics.activeUserSessions < 0) {
+      this.metrics.activeUserSessions = 0;
+    }
+    console.log(`Active sessions: ${this.metrics.activeUserSessions}`);
   }
 
   // Record a request error
   public recordRequestError(route: string, errorType: string): void {
-    this.requestErrors.inc({ route, error_type: errorType });
+    this.metrics.requestErrors.push({ route, errorType });
+    console.log(`Error recorded: ${route} ${errorType}`);
   }
 
   // Record a movie booking
   public recordMovieBooking(movieId: string, theaterId: string): void {
-    this.movieBookings.inc({ movie_id: movieId, theater_id: theaterId });
+    this.metrics.movieBookings.push({ movieId, theaterId });
+    console.log(`Booking recorded: Movie ${movieId} at Theater ${theaterId}`);
   }
 
   // Record app load time
   public recordAppLoadTime(duration: number): void {
-    this.appLoadTime.observe(duration);
+    this.metrics.appLoadTime.push(duration);
+    console.log(`App load time: ${duration.toFixed(3)}s`);
   }
 
   // Record component render time
   public recordComponentRenderTime(component: string, duration: number): void {
-    this.componentRenderTime.observe({ component }, duration);
+    this.metrics.componentRenderTimes.push({ component, duration });
+    console.log(`Component render time: ${component} ${duration.toFixed(3)}s`);
   }
 
-  // Get metrics for Prometheus
+  // Format metrics in Prometheus format for compatibility
+  private formatMetric(name: string, help: string, type: string, values: { labels?: Record<string, string>; value: number }[]): string {
+    const lines = [
+      `# HELP ${name} ${help}`,
+      `# TYPE ${name} ${type}`
+    ];
+
+    values.forEach(({ labels, value }) => {
+      if (labels && Object.keys(labels).length > 0) {
+        const labelStr = Object.entries(labels)
+          .map(([k, v]) => `${k}="${v}"`)
+          .join(',');
+        lines.push(`${name}{${labelStr}} ${value}`);
+      } else {
+        lines.push(`${name} ${value}`);
+      }
+    });
+
+    return lines.join('\n') + '\n';
+  }
+
+  // Get metrics in Prometheus text format
   public async getMetrics(): Promise<string> {
-    return register.metrics();
+    let result = '';
+
+    // Page views
+    const pageViewValues = Object.entries(this.metrics.pageViews).map(([route, count]) => ({
+      labels: { route },
+      value: count
+    }));
+    result += this.formatMetric(
+      'cinebooker_page_views_total',
+      'Total number of page views',
+      'counter',
+      pageViewValues
+    );
+
+    // Active sessions
+    result += this.formatMetric(
+      'cinebooker_active_user_sessions',
+      'Number of active user sessions',
+      'gauge',
+      [{ value: this.metrics.activeUserSessions }]
+    );
+
+    // Request errors
+    const errorsByType: Record<string, number> = {};
+    this.metrics.requestErrors.forEach(({ errorType }) => {
+      if (!errorsByType[errorType]) errorsByType[errorType] = 0;
+      errorsByType[errorType]++;
+    });
+    
+    const errorValues = Object.entries(errorsByType).map(([errorType, count]) => ({
+      labels: { error_type: errorType },
+      value: count
+    }));
+    
+    result += this.formatMetric(
+      'cinebooker_request_errors_total',
+      'Total number of request errors',
+      'counter',
+      errorValues
+    );
+
+    // Movie bookings
+    result += this.formatMetric(
+      'cinebooker_movie_bookings_total',
+      'Total number of movie bookings',
+      'counter',
+      [{ value: this.metrics.movieBookings.length }]
+    );
+
+    // App load time - use average
+    const avgLoadTime = this.metrics.appLoadTime.length > 0
+      ? this.metrics.appLoadTime.reduce((sum, time) => sum + time, 0) / this.metrics.appLoadTime.length
+      : 0;
+      
+    result += this.formatMetric(
+      'cinebooker_app_load_time_seconds',
+      'Application load time in seconds',
+      'gauge',
+      [{ value: avgLoadTime }]
+    );
+
+    // Component render time
+    const componentTimes: Record<string, { sum: number, count: number }> = {};
+    this.metrics.componentRenderTimes.forEach(({ component, duration }) => {
+      if (!componentTimes[component]) componentTimes[component] = { sum: 0, count: 0 };
+      componentTimes[component].sum += duration;
+      componentTimes[component].count++;
+    });
+    
+    const componentAvgTimes = Object.entries(componentTimes).map(([component, { sum, count }]) => ({
+      labels: { component },
+      value: sum / count
+    }));
+    
+    result += this.formatMetric(
+      'cinebooker_component_render_time_seconds',
+      'Component render time in seconds',
+      'gauge',
+      componentAvgTimes
+    );
+
+    return result;
   }
 }
 
