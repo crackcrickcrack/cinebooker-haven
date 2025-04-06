@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,11 +19,27 @@ import Faq from "./pages/Faq";
 import Contact from "./pages/Contact";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import MetricsEndpoint from "./pages/api/metrics";
+import metricsService from "./services/metricsService";
 
 // Create a client
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
+  useEffect(() => {
+    // Record app load time
+    const loadTime = performance.now() / 1000;
+    metricsService.recordAppLoadTime(loadTime);
+    
+    // Set initial active user session
+    metricsService.incrementActiveUserSessions();
+    
+    // Clean up when the app unmounts
+    return () => {
+      metricsService.decrementActiveUserSessions();
+    };
+  }, []);
+
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
@@ -45,6 +61,7 @@ const App: React.FC = () => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/api/metrics" element={<MetricsEndpoint />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
