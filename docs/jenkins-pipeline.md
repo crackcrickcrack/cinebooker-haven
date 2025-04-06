@@ -66,24 +66,13 @@ Create credentials in Jenkins for:
 - Docker Hub access (`docker-hub-credentials`)
 - SonarQube access (`sonar-token`)
 
-### 2. Set up the Jenkins Shared Library
-
-1. Create a Git repository for the Shared Library
-2. Add all files from the `jenkins-shared-library` directory to this repository
-3. In Jenkins, navigate to "Manage Jenkins" > "Configure System"
-4. Under "Global Pipeline Libraries", add a new library:
-   - Name: `cinebooker-pipeline-library`
-   - Default version: `main`
-   - Retrieval method: "Modern SCM"
-   - Select "Git" and provide the repository URL
-
-### 3. Set up the pipeline
+### 2. Set up the pipeline
 
 1. Create a new Pipeline job in Jenkins
 2. Configure it to use the Jenkinsfile from the repository
 3. Specify the branch to build (default: `main`)
 
-### 4. Configure Pipeline Parameters
+### 3. Configure Pipeline Parameters
 
 Configure the following parameters:
 - `BRANCH_NAME`: Git branch to build (default: `main`)
@@ -93,13 +82,13 @@ Configure the following parameters:
 - `SONAR_PROJECT_KEY`: SonarQube project key (default: `cinebooker`)
 - `ARGOCD_UPDATER_URL`: ArgoCD Image Updater URL
 
-### 5. Tool Configuration
+### 4. Tool Configuration
 
 In "Manage Jenkins" > "Global Tool Configuration":
 1. Configure NodeJS installation
 2. Configure SonarQube Scanner
 
-### 6. Run the pipeline
+### 5. Run the pipeline
 
 The pipeline will:
 - Check out code from the git repository
@@ -129,4 +118,3 @@ If the pipeline fails:
 3. Ensure Jenkins has sufficient permissions to access required resources
 4. Check that all required tools (Node.js, Docker, etc.) are properly installed
 5. Verify connectivity to external services (SonarQube, Docker Hub, ArgoCD)
-
