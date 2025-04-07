@@ -1,3 +1,4 @@
+
 pipeline {
     agent {
         node {
@@ -16,7 +17,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "${params.DOCKER_REGISTRY}/${params.DOCKER_REPO}:${params.DOCKER_TAG}"
-        SONAR_HOST_URL = 'http://51.20.134.81:9000/'
+        SONAR_HOST_URL = 'https://sonarqube.your-domain.com'
         NODE_ENV = 'production'
         WORKSPACE = "${env.WORKSPACE}-${env.BUILD_NUMBER}"
     }
@@ -43,17 +44,31 @@ pipeline {
         }
 
         stage('Build & Test') {
+            agent {
+                docker {
+                    image 'node:22-alpine'
+                    reuseNode true
+                }
+            }
             steps {
                 echo "Installing dependencies and running tests..."
-                script {
-                    docker.image('node:18-alpine').inside {
-                        sh '''
-                            npm ci || exit 1
-                            npx eslint . --ext .js,.ts,.jsx,.tsx || echo "Linting issues found, continuing"
-                            npx vitest run --passWithNoTests || echo "Tests failed but continuing"
-                        '''
-                    }
-                }
+                sh 'npm install'
+                sh 'npm install -D @vitest/coverage-v8'
+                sh 'npm ci --production=false'
+                sh 'npm run lint || echo "Linting issues found but continuing"'
+                sh 'npm test -- --coverage || { echo "Tests failed"; exit 1; }'
+                sh 'npm run build'
+                
+                // Publish test reports
+                junit 'coverage/junit.xml'
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'Coverage Report'
+                ])
             }
         }
 
@@ -150,7 +165,7 @@ pipeline {
                 sh """
                     # Wait for ArgoCD to start the update
                     sleep 10
-                    curl -s ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/status | grep -q "Syncing" || echo "ArgoCD sync status check failed but continuing"
+                    curl -s ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/status | grep -q "Syncing"
                 """
             }
         }
