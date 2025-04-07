@@ -1,3 +1,4 @@
+
 pipeline {
     agent {
         node {
@@ -50,8 +51,23 @@ pipeline {
                 }
             }
             steps {
-                // Use our shared library function
-                buildAndTest()
+                echo "Installing dependencies and running tests..."
+                
+                // Install dependencies
+                sh 'npm ci'
+                
+                // Run linting (continue on error)
+                sh 'npx eslint . || echo "Linting issues found but continuing"'
+                
+                // Run tests with compatible versions
+                sh 'npx vitest run || { echo "Tests failed"; exit 1; }'
+                
+                // Build the application
+                sh 'npm run build'
+                
+                // Publish test reports if they exist
+                sh '[ -d "coverage" ] && [ -f "coverage/junit.xml" ] && junit "coverage/junit.xml" || echo "No test reports to publish"'
+                sh '[ -d "coverage" ] && [ -f "coverage/index.html" ] && publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "coverage", reportFiles: "index.html", reportName: "Coverage Report"]) || echo "No coverage report to publish"'
             }
         }
 

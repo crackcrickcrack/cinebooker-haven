@@ -4,18 +4,15 @@
 def call() {
     echo "Installing dependencies and running tests..."
     
-    // Install all dependencies including dev dependencies
+    // Install all dependencies
     sh 'npm ci'
-    
-    // Install specific testing tools with compatible versions
-    // Using vitest@1.6.1 to match what's already installed in the project
-    sh 'npm install -D vite vitest@1.6.1 @vitest/coverage-v8@1.6.1 eslint @eslint/js typescript @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react-hooks eslint-plugin-react-refresh'
     
     // Run linting with npx to ensure the local eslint is used
     sh 'npx eslint . || echo "Linting issues found but continuing"'
     
     // Run tests with npx to ensure vitest is found
-    sh 'npx vitest run --coverage || { echo "Tests failed"; exit 1; }'
+    // No need to install specific versions as we're using what's in package.json
+    sh 'npx vitest run || { echo "Tests failed"; exit 1; }'
     
     // Build the application
     sh 'npm run build'
