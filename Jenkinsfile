@@ -50,7 +50,7 @@ pipeline {
                     reuseNode true
                 }
             }
-            steps {
+         steps {
                 echo "Installing dependencies and running tests..."
                 // Install all dependencies including dev dependencies
                 sh 'npm install || { echo "npm install failed"; exit 1; }'
@@ -58,7 +58,7 @@ pipeline {
                 sh 'npm ci || { echo "npm ci failed"; exit 1; }'
                 
                 // Install specific testing tools explicitly to ensure they're available
-                sh 'npm install -D vite vitest @vitest/coverage-v8 eslint typescript typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh --legacy-peer-deps || { echo "Dependency installation failed"; exit 1; }'
+                sh 'npm install -D vite@4.4.9 vitest@0.34.1 @vitest/coverage-v8 eslint@9.24.0 @eslint/js@1.0.0 typescript@5.2.2 @typescript-eslint/eslint-plugin@6.7.2 eslint-plugin-react-hooks@4.6.0 eslint-plugin-react-refresh@0.3.4 --legacy-peer-deps || { echo "Dependency installation failed"; exit 1; }'
                 
                 // Run linting with npx to ensure the local eslint is used
                 sh 'npx eslint . || echo "Linting issues found but continuing"'
