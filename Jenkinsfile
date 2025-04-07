@@ -58,7 +58,7 @@ pipeline {
                 sh 'npm ci || { echo "npm ci failed"; exit 1; }'
                 
                 // Install specific testing tools explicitly to ensure they're available
-                sh 'npm install -D vite vitest @vitest/coverage-v8 eslint typescript typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh || { echo "Dependency installation failed"; exit 1; }'
+                sh 'npm install -D vite vitest @vitest/coverage-v8 eslint typescript typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh --legacy-peer-deps || { echo "Dependency installation failed"; exit 1; }'
                 
                 // Run linting with npx to ensure the local eslint is used
                 sh 'npx eslint . || echo "Linting issues found but continuing"'
