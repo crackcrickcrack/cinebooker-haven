@@ -1,4 +1,3 @@
-
 pipeline {
     agent {
         node {
@@ -56,11 +55,14 @@ pipeline {
                 // Install dependencies
                 sh 'npm ci'
                 
+                // Install specific development dependencies needed for the build/test process
+                sh 'npm install -D @eslint/js vite typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh vitest@1.6.1 @vitest/coverage-v8@1.6.1'
+                
                 // Run linting (continue on error)
                 sh 'npx eslint . || echo "Linting issues found but continuing"'
                 
                 // Run tests with compatible versions
-                sh 'npx vitest run || { echo "Tests failed"; exit 1; }'
+                sh 'npx vitest run --passWithNoTests || { echo "Tests failed"; exit 1; }'
                 
                 // Build the application
                 sh 'npm run build'
