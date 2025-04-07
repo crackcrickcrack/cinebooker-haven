@@ -46,17 +46,17 @@ pipeline {
         stage('Build & Test') {
             agent {
                 docker {
-                    image 'node:22-alpine'
+                    image 'node:18-alpine'
                     reuseNode true
                 }
             }
             steps {
                 echo "Installing dependencies and running tests..."
                 // Install all dependencies including dev dependencies
-                sh 'npm ci'
+                sh 'npm ci || { echo "npm ci failed"; exit 1; }'
                 
                 // Install specific testing tools explicitly to ensure they're available
-                sh 'npm install -D vite vitest @vitest/coverage-v8 eslint typescript typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh'
+                sh 'npm install -D vite vitest @vitest/coverage-v8 eslint typescript typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh || { echo "Dependency installation failed"; exit 1; }'
                 
                 // Run linting with npx to ensure the local eslint is used
                 sh 'npx eslint . || echo "Linting issues found but continuing"'
@@ -65,7 +65,7 @@ pipeline {
                 sh 'npx vitest run --coverage || { echo "Tests failed"; exit 1; }'
                 
                 // Build the application
-                sh 'npm run build'
+                sh 'npm run build || { echo "Build failed"; exit 1; }'
                 
                 // Publish test reports if they exist
                 sh '[ -d "coverage" ] && [ -f "coverage/junit.xml" ] && junit "coverage/junit.xml" || echo "No test reports to publish"'
