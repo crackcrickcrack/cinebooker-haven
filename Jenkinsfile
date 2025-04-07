@@ -53,6 +53,8 @@ pipeline {
             steps {
                 echo "Installing dependencies and running tests..."
                 // Install all dependencies including dev dependencies
+                sh 'npm install || { echo "npm install failed"; exit 1; }'
+                sh 'npm install --package-lock-only || { echo "Updating lock file failed"; exit 1; }'
                 sh 'npm ci || { echo "npm ci failed"; exit 1; }'
                 
                 // Install specific testing tools explicitly to ensure they're available
