@@ -59,8 +59,9 @@ pipeline {
                 sh 'npm install -D @eslint/js vite typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh vitest@1.6.1 @vitest/coverage-v8@1.6.1'
                 
                 // Run linting (continue on error)
-                sh 'npx eslint . || echo "Linting issues found but continuing"'
-                
+                sh 'npx eslint . --ext .js,.ts,.jsx,.tsx || echo "Linting issues found, continuing"'
+
+               
                 // Run tests with compatible versions
                 sh 'npx vitest run --passWithNoTests || { echo "Tests failed"; exit 1; }'
                 
