@@ -17,7 +17,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "${params.DOCKER_REGISTRY}/${params.DOCKER_REPO}:${params.DOCKER_TAG}"
-        SONAR_HOST_URL = 'https://sonarqube.your-domain.com'
+        SONAR_HOST_URL = 'http://51.20.134.81:9000/'
         NODE_ENV = 'production'
         WORKSPACE = "${env.WORKSPACE}-${env.BUILD_NUMBER}"
     }
