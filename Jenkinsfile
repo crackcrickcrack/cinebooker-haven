@@ -50,7 +50,7 @@ pipeline {
                     reuseNode true
                 }
             }
-         steps {
+            steps {
                 echo "Installing dependencies and running tests..."
                 // Install all dependencies including dev dependencies
                 sh 'npm install --legacy-peer-deps || { echo "npm install failed"; exit 1; }'
