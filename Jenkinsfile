@@ -56,7 +56,7 @@ pipeline {
                     echo "Checking for existing node_modules..."
                     [ -d node_modules ] && rm -rf node_modules
                     echo 'package-lock=true\nprefer-offline=true\nstrict-peer-dependencies=false' > .npmrc
-                    npm ci --prefer-offline || { echo "npm ci failed"; exit 1; }
+                    npm ci --prefer-offline --include=dev || { echo "npm ci failed"; exit 1; }
                 '''
             }
         }
