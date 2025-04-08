@@ -1,4 +1,4 @@
-import { Movie, Showtime, Theater } from "@/types/cinema";
+import { Movie, Showtime, Theater, SeatRow, Seat } from "@/types/cinema";
 
 export const movies: Movie[] = [
   {
@@ -327,17 +327,14 @@ export const showtimes: Showtime[] = [
   }
 ];
 
-function generateSeatsLayout(startRow: string, endRow: string, seatsPerRow: number, premiumRows: number): {
-  row: string; 
-  seats: { id: string; number: number; type: string; status: string }[]
-}[] {
-  const rows: {row: string; seats: { id: string; number: number; type: string; status: string }[]}[] = [];
+function generateSeatsLayout(startRow: string, endRow: string, seatsPerRow: number, premiumRows: number): SeatRow[] {
+  const rows: SeatRow[] = [];
   const startCharCode = startRow.charCodeAt(0);
   const endCharCode = endRow.charCodeAt(0);
   
   for (let i = startCharCode; i <= endCharCode; i++) {
     const rowLetter = String.fromCharCode(i);
-    const seats = [];
+    const seats: Seat[] = [];
     
     for (let j = 1; j <= seatsPerRow; j++) {
       seats.push({
