@@ -43,34 +43,46 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
+       stages {
+    stage('Build and Test') {
+        agent {
+            node {
+                label 'ec2-build-node'
+                customWorkspace '/home/ubuntu/jenkins-agent/workspace'
+            }
+        }
+
+        steps {
+            cleanWs()
+            checkout scm
+
+            script {
+                try {
+                    docker.image('node:18-alpine').inside('--memory=4g --cpus=2') {
+                        // Install dependencies (including dev)
+                        sh 'npm ci --production=false'
+
+                        // Run lint
+                        sh 'npm run lint || echo "Lint issues found, continuing..."'
+
+                        // Run tests
+                        sh 'npm run test || echo "Tests failed, continuing..."'
+
+                        // Build
+                        sh 'npm run build || { echo "Build failed"; exit 1; }'
+
+                        // Archive built dist folder
+                        sh 'tar -czf dist.tar.gz dist/'
+                        archiveArtifacts artifacts: 'dist.tar.gz', fingerprint: true
+                    }
+                } catch (Exception e) {
+                    currentBuild.result = 'FAILURE'
+                    error "Build failed: ${e.message}"
                 }
             }
-            steps {
-    echo "Installing dependencies and running tests..."
-
-    // Clean install to respect package-lock.json
-    sh 'npm ci || { echo "npm ci failed"; exit 1; }'
-
-    // Run linting
-    sh 'npx eslint . || echo "Linting issues found but continuing"'
-
-    // Run tests
-    sh 'npx vitest run --passWithNoTests || echo "Tests failed but continuing"'
-
-    // Build the app
-    sh 'npm run build || { echo "Build failed"; exit 1; }'
-
-    // Publish test reports if they exist
-    sh '[ -d "coverage" ] && [ -f "coverage/junit.xml" ] && junit "coverage/junit.xml" || echo "No test reports to publish"'
-    sh '[ -d "coverage" ] && [ -f "coverage/index.html" ] && publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "coverage", reportFiles: "index.html", reportName: "Coverage Report"]) || echo "No coverage report to publish"'
-}
-
         }
+    }
+}
 
         stage('SonarQube Analysis') {
             agent {
