@@ -44,7 +44,7 @@ pipeline {
             agent {
                 node {
                     label 'ec2-build-node'
-                    customWorkspace '/home/ubuntu/jenkins-agent/workspace'
+                    
                 }
             }
             steps {
