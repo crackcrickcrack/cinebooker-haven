@@ -1,3 +1,4 @@
+
 pipeline {
     agent {
         node {
@@ -57,7 +58,7 @@ pipeline {
                 // Install all dependencies including dev dependencies
                 sh 'npm ci || npm install --legacy-peer-deps || { echo "npm install failed"; exit 1; }'
                 
-                // Explicitly install correct versions of testing tools
+                // Explicitly install Vite and testing tools with specific versions
                 sh '''
                 npm install --save-dev --legacy-peer-deps \
                   vite@4.4.9 \

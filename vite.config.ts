@@ -31,4 +31,14 @@ export default defineConfig(({ mode }) => ({
     // Provide empty process.env to avoid errors
     'process.env': {},
   },
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
+    sourcemap: true,
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+  },
 }));
