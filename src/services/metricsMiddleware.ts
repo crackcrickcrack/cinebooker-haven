@@ -5,7 +5,7 @@ import metricsService from './metricsService';
  * Middleware function to measure API request duration and record metrics
  */
 export const apiMetricsMiddleware = () => {
-  return async (req: any, res: any, next: any) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     const start = Date.now();
     const endpoint = req.path;
     const method = req.method;
@@ -14,7 +14,7 @@ export const apiMetricsMiddleware = () => {
     const originalSend = res.send;
     
     // Override send function to capture response time
-    res.send = function(...args: any[]) {
+    res.send = function(...args: unknown[]) {
       const duration = (Date.now() - start) / 1000;
       const status = res.statusCode.toString();
       
@@ -33,3 +33,18 @@ export const apiMetricsMiddleware = () => {
     next();
   };
 };
+
+// Define the types for Express request, response, and next function
+type Request = {
+  path: string;
+  method: string;
+  [key: string]: unknown;
+};
+
+type Response = {
+  statusCode: number;
+  send: (...args: unknown[]) => unknown;
+  [key: string]: unknown;
+};
+
+type NextFunction = () => void;

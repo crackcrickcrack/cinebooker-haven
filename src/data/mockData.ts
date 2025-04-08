@@ -327,8 +327,11 @@ export const showtimes: Showtime[] = [
   }
 ];
 
-function generateSeatsLayout(startRow: string, endRow: string, seatsPerRow: number, premiumRows: number): any[] {
-  const rows: any[] = [];
+function generateSeatsLayout(startRow: string, endRow: string, seatsPerRow: number, premiumRows: number): {
+  row: string; 
+  seats: { id: string; number: number; type: string; status: string }[]
+}[] {
+  const rows: {row: string; seats: { id: string; number: number; type: string; status: string }[]}[] = [];
   const startCharCode = startRow.charCodeAt(0);
   const endCharCode = endRow.charCodeAt(0);
   
