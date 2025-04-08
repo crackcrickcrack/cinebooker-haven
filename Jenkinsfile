@@ -34,6 +34,21 @@ pipeline {
             }
         }
 
+        stage('Preflight: Validate package.json') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    args '-v /home/ubuntu/.npm:/root/.npm'
+                }
+            }
+            steps {
+                sh '''
+                    echo "package-lock=true\nprefer-offline=true\nstrict-peer-dependencies=false" > .npmrc
+                    npm install --package-lock-only --dry-run
+                '''
+            }
+        }
+
         stage('Build and Test') {
             agent {
                 docker {
@@ -44,11 +59,14 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm ci --production=false'
-                        sh 'npm run lint || echo "Lint issues found, continuing..."'
-                        sh 'npm run test || echo "Tests failed, continuing..."'
-                        sh 'npm run build || { echo "Build failed"; exit 1; }'
-                        sh 'tar -czf dist.tar.gz dist/'
+                        sh '''
+                            echo "package-lock=true\nprefer-offline=true\nstrict-peer-dependencies=false" > .npmrc
+                            npm ci --prefer-offline
+                            npm run lint || echo "Lint issues found, continuing..."
+                            npm run test || echo "Tests failed, continuing..."
+                            npm run build || { echo "Build failed"; exit 1; }
+                            tar -czf dist.tar.gz dist/
+                        '''
                         archiveArtifacts artifacts: 'dist.tar.gz', fingerprint: true
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
@@ -147,12 +165,12 @@ pipeline {
     post {
         always {
             echo "Cleaning up workspace and Docker resources..."
-            sh """
+            sh '''
                 docker rmi ${DOCKER_IMAGE} || true
-                docker image prune -f
-                docker container prune -f
-                rm -rf node_modules dist coverage
-            """
+                docker image prune -f || true
+                docker container prune -f || true
+                rm -rf node_modules dist coverage .npm .sonar .scannerwork package-lock.json || true
+            '''
             cleanWs()
         }
 
