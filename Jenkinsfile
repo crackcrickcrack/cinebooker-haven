@@ -71,7 +71,7 @@ pipeline {
             steps {
                 sh '''
                     npm run lint || echo "Lint warnings found"
-                    npm install -D jsdom
+                    
                     npm test || echo "Tests failed, continuing for demo"
                 '''
             }
