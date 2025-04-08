@@ -1,8 +1,6 @@
 pipeline {
     agent {
-        node {
-            label 'ec2-build-node'
-        }
+        label 'ec2-build-node'
     }
 
     parameters {
@@ -18,7 +16,6 @@ pipeline {
         DOCKER_IMAGE = "${params.DOCKER_REGISTRY}/${params.DOCKER_REPO}:${params.DOCKER_TAG}"
         SONAR_HOST_URL = 'https://sonarqube.your-domain.com'
         NODE_ENV = 'production'
-        WORKSPACE = "${env.WORKSPACE}-${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -26,17 +23,14 @@ pipeline {
             steps {
                 cleanWs()
                 echo "Checking out code from branch: ${params.BRANCH_NAME}"
-                checkout([
+                checkout scm: [
                     $class: 'GitSCM',
                     branches: [[name: "${params.BRANCH_NAME}"]],
-                    doGenerateSubmoduleConfigurations: false,
-                    extensions: [],
-                    submoduleCfg: [],
                     userRemoteConfigs: [[
                         url: 'https://github.com/crackcrickcrack/cinebooker-haven',
                         credentialsId: 'github-credentials'
                     ]]
-                ])
+                ]
             }
         }
 
@@ -44,12 +38,10 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
-                    reuseNode true
+                    args '-v /home/ubuntu/.npm:/root/.npm'
                 }
             }
             steps {
-                cleanWs()
-                checkout scm
                 script {
                     try {
                         sh 'npm ci --production=false'
@@ -70,7 +62,7 @@ pipeline {
             agent {
                 docker {
                     image 'sonarsource/sonar-scanner-cli:latest'
-                    reuseNode true
+                    args '-v /home/ubuntu/.sonar:/root/.sonar'
                 }
             }
             steps {
@@ -126,7 +118,7 @@ pipeline {
                     passwordVariable: 'DOCKER_PASSWORD'
                 )]) {
                     sh """
-                        echo ${DOCKER_PASSWORD} | docker login docker.io -u ${DOCKER_USER} --password-stdin
+                        echo \${DOCKER_PASSWORD} | docker login ${params.DOCKER_REGISTRY} -u \${DOCKER_USER} --password-stdin
                         docker push ${DOCKER_IMAGE}
                     """
                 }
