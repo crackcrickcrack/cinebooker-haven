@@ -1,7 +1,4 @@
 const globals = require('globals');
-const reactHooksPlugin = require('eslint-plugin-react-hooks');
-const reactRefreshPlugin = require('eslint-plugin-react-refresh');
-const tsPlugin = require('@typescript-eslint/eslint-plugin');
 
 module.exports = {
   ignorePatterns: ['dist'],
@@ -18,9 +15,10 @@ module.exports = {
     es2020: true,
   },
   plugins: ['react-hooks', 'react-refresh', '@typescript-eslint'],
+  extends: [
+    'plugin:react-hooks/recommended',
+  ],
   rules: {
-    ...reactHooksPlugin.configs.recommended.rules,
-    // Removed invalid option `allowConstantExport`
     'react-refresh/only-export-components': 'warn',
     '@typescript-eslint/no-unused-vars': 'off',
   },
