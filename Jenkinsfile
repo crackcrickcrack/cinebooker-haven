@@ -42,9 +42,9 @@ pipeline {
 
         stage('Build and Test') {
             agent {
-                node {
-                    label 'ec2-build-node'
-                    
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
                 }
             }
             steps {
