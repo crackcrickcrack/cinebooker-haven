@@ -51,15 +51,14 @@ pipeline {
                 cleanWs()
                 checkout scm
                 script {
-                    
-                            sh 'npm ci --production=false'
-                            sh 'npm run lint || echo "Lint issues found, continuing..."'
-                            sh 'npm run test || echo "Tests failed, continuing..."'
-                            sh 'npm run build || { echo "Build failed"; exit 1; }'
-                            sh 'tar -czf dist.tar.gz dist/'
-                            archiveArtifacts artifacts: 'dist.tar.gz', fingerprint: true
-                        
-                    catch (Exception e) {
+                    try {
+                        sh 'npm ci --production=false'
+                        sh 'npm run lint || echo "Lint issues found, continuing..."'
+                        sh 'npm run test || echo "Tests failed, continuing..."'
+                        sh 'npm run build || { echo "Build failed"; exit 1; }'
+                        sh 'tar -czf dist.tar.gz dist/'
+                        archiveArtifacts artifacts: 'dist.tar.gz', fingerprint: true
+                    } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
                         error "Build failed: ${e.message}"
                     }
