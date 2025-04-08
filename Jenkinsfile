@@ -51,16 +51,15 @@ pipeline {
                 cleanWs()
                 checkout scm
                 script {
-                    try {
-                        docker.image('node:18-alpine').inside('--memory=4g --cpus=2') {
+                    
                             sh 'npm ci --production=false'
                             sh 'npm run lint || echo "Lint issues found, continuing..."'
                             sh 'npm run test || echo "Tests failed, continuing..."'
                             sh 'npm run build || { echo "Build failed"; exit 1; }'
                             sh 'tar -czf dist.tar.gz dist/'
                             archiveArtifacts artifacts: 'dist.tar.gz', fingerprint: true
-                        }
-                    } catch (Exception e) {
+                        
+                    catch (Exception e) {
                         currentBuild.result = 'FAILURE'
                         error "Build failed: ${e.message}"
                     }
