@@ -1,4 +1,3 @@
-
 import { Movie } from '@/types/cinema';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, Clock, Star, PlayCircle } from 'lucide-react';

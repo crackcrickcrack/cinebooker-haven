@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Movie } from '@/types/cinema';
@@ -122,8 +122,8 @@ const MovieDetails: React.FC = () => {
                   </p>
                   
                   <div className="flex flex-wrap gap-4">
-                    <Button size="lg" className="bg-primary hover:bg-primary/90">
-                      Book Tickets
+                    <Button size="lg" className="bg-primary hover:bg-primary/90" asChild>
+                      <Link to={`/movies/${id}/booking`}>Book Tickets</Link>
                     </Button>
                     <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10">
                       <PlayCircle className="mr-2 h-5 w-5" />
@@ -186,8 +186,11 @@ const MovieDetails: React.FC = () => {
                       variant="default" 
                       className="w-full" 
                       disabled={!showtime.available}
+                      asChild
                     >
-                      {showtime.available ? 'Book Now' : 'Sold Out'}
+                      <Link to={showtime.available ? `/movies/${id}/booking` : '#'}>
+                        {showtime.available ? 'Book Now' : 'Sold Out'}
+                      </Link>
                     </Button>
                   </div>
                 ))}
