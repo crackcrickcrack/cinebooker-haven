@@ -10,6 +10,7 @@ pipeline {
         string(name: 'DOCKER_REPO', defaultValue: 'sandeepkalathil/cinebooker', description: 'Docker repository')
         string(name: 'SONAR_PROJECT_KEY', defaultValue: 'cinebooker', description: 'SonarQube project key')
         string(name: 'ARGOCD_UPDATER_URL', defaultValue: 'https://13.61.141.211:31504', description: 'ArgoCD Image Updater URL')
+        string(name: 'ARGOCD_TOKEN', defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJhZG1pbjphcGlLZXkiLCJuYmYiOjE3NDUzMjY3MzIsImlhdCI6MTc0NTMyNjczMiwianRpIjoiZjg4Y2RjYWEtYjVlMi00YWU4LWFjZjYtOGY5OWYxMWFhZjg4In0.jEVOQUEBcmcdjWtSl1Mz0YLGFmigEv7xR4ha1AwvgkE', description: 'ArgoCD Token')
     }
 
     environment {
@@ -174,8 +175,9 @@ pipeline {
         stage('Notify ArgoCD') {
             steps {
                 sh """
-                    curl -X POST ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/images \\
+                    curl -k -X POST ${params.ARGOCD_UPDATER_URL}/api/v1/applications/cinebooker/images \\
                     -H 'Content-Type: application/json' \\
+                    -H "Authorization: Bearer ${ARGOCD_TOKEN}" \\
                     -d '{"image": "${DOCKER_IMAGE}", "force": true}'
                 """
                 echo "Notified ArgoCD Image Updater"
