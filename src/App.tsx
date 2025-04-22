@@ -54,6 +54,7 @@ const App: React.FC = () => {
               <Route path="/promotions" element={<Promotions />} />
               <Route path="/movies/:id" element={<MovieDetails />} />
               <Route path="/booking/:id" element={<Booking />} />
+              <Route path="/movies/:id/booking" element={<Booking />} /> {/* Added this new route */}
               <Route path="/bookings" element={<Bookings />} />
               <Route path="/login" element={<Login />} />
               <Route path="/faq" element={<Faq />} />
