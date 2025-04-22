@@ -130,15 +130,18 @@ pipeline {
 
                 echo "Scanning image with Trivy..."
                 sh """
-                    docker run --rm \\
-                    -v /var/run/docker.sock:/var/run/docker.sock \\
-                    -v \${WORKSPACE}:/root/.cache/ \\
-                    aquasec/trivy:latest image \\
-                    --format json \\
-                    --output trivy-results.json \\
+                    docker run --rm \
+                    -v /var/run/docker.sock:/var/run/docker.sock \
+                    -v ${WORKSPACE}:/root/.cache/ \
+                    -v ${WORKSPACE}:/report/ \
+                    aquasec/trivy:latest image \
+                    --scanners vuln \
+                    --format json \
+                    --output /report/trivy-results.json \
                     ${DOCKER_IMAGE}
+
                 """
-                archiveArtifacts artifacts: 'trivy-results.json', fingerprint: true
+                archiveArtifacts artifacts: 'trivy-results.json', allowEmptyArchive: false, fingerprint: true
 
                 // Fail pipeline if HIGH/CRITICAL found
                 sh """
