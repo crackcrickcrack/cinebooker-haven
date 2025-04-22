@@ -1,4 +1,3 @@
-
 # CineBooker - Cinema Booking Application
 
 A modern cinema ticket booking application built with React, TypeScript, and Tailwind CSS.
