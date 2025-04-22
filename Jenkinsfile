@@ -55,7 +55,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Checking for existing node_modules..."
-                    [ -d node_modules ] && rm -rf node_modules
+                    [ -d node_modules ] && sudo rm -rf node_modules
                     if [ ! -f package-lock.json ]; then
                       echo "package-lock.json missing, generating it with npm install --package-lock-only"
                       npm install --package-lock-only
@@ -187,7 +187,7 @@ pipeline {
                 docker rmi ${DOCKER_IMAGE} || true
                 docker image prune -f || true
                 docker container prune -f || true
-                rm -rf node_modules dist coverage .npm .sonar .scannerwork package-lock.json || true
+               sudo  rm -rf node_modules dist coverage .npm .sonar .scannerwork package-lock.json || true
             '''
             cleanWs()
         }
