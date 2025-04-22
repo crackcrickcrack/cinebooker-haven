@@ -18,6 +18,7 @@ pipeline {
         SONAR_HOST_URL = 'http://13.51.6.235:9000/projects/'
         NODE_ENV = 'production'
         NODE_DOCKER_IMAGE = 'node:18-alpine'
+        ARGOCD_TOKEN = "${params.ARGOCD_TOKEN}"
     }
 
     options {
