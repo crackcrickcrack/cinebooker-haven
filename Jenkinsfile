@@ -55,9 +55,14 @@ pipeline {
                 sh '''
                     echo "Checking for existing node_modules..."
                     [ -d node_modules ] && rm -rf node_modules
-                    echo 'package-lock=true\nprefer-offline=true\nstrict-peer-dependencies=false' > .npmrc
+                    if [ ! -f package-lock.json ]; then
+                      echo "package-lock.json missing, generating it with npm install --package-lock-only"
+                      npm install --package-lock-only
+                    fi
+                    echo -e 'package-lock=true\nprefer-offline=true\nstrict-peer-dependencies=false' > .npmrc
                     npm ci --prefer-offline --include=dev || { echo "npm ci failed"; exit 1; }
-                '''
+                  ''' 
+              
             }
         }
 
