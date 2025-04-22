@@ -14,7 +14,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "${params.DOCKER_REGISTRY}/${params.DOCKER_REPO}:${params.DOCKER_TAG}"
-        SONAR_HOST_URL = 'http://13.49.73.214:9000/projects'
+        SONAR_HOST_URL = 'http://13.51.6.235:9000/projects/'
         NODE_ENV = 'production'
         NODE_DOCKER_IMAGE = 'node:18-alpine'
     }
