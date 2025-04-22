@@ -1,220 +1,238 @@
-
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import AppLayout from '@/components/layout/AppLayout';
-import { getShowtimeById, getMovieById, getTheaterById } from '@/data/mockData';
-import { Movie, Showtime, Theater, Screen } from '@/types/cinema';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import { Movie, SeatRow } from '@/types/cinema';
 import { Button } from '@/components/ui/button';
-import { CalendarIcon, Clock, MapPin, User, CreditCard } from 'lucide-react';
-import { format } from 'date-fns';
+import { Calendar, Clock, Film, MapPin, Ticket } from 'lucide-react';
 import SeatMap from '@/components/booking/SeatMap';
-import { Card, CardContent } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
+import { usePageViewMetrics } from '@/hooks/usePageViewMetrics';
 
-const Booking = () => {
+// Sample movie data
+const sampleMovie: Movie = {
+  id: "1",
+  title: "Inception",
+  posterUrl: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
+  backdropUrl: "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
+  synopsis: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+  rating: 8.8,
+  duration: 148,
+  releaseDate: "2010-07-16",
+  genres: ["Action", "Adventure", "Sci-Fi"],
+  director: "Christopher Nolan",
+  cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Ellen Page"]
+};
+
+// Sample seat layout
+const sampleSeatsLayout: SeatRow[] = [
+  {
+    row: "A",
+    seats: [
+      { id: "A1", row: "A", number: "1", status: "available", type: "standard" },
+      { id: "A2", row: "A", number: "2", status: "available", type: "standard" },
+      { id: "A3", row: "A", number: "3", status: "reserved", type: "standard" },
+      { id: "A4", row: "A", number: "4", status: "available", type: "standard" },
+      { id: "A5", row: "A", number: "5", status: "available", type: "standard" },
+      { id: "A6", row: "A", number: "6", status: "available", type: "standard" },
+      { id: "A7", row: "A", number: "7", status: "available", type: "standard" },
+      { id: "A8", row: "A", number: "8", status: "available", type: "standard" },
+    ]
+  },
+  {
+    row: "B",
+    seats: [
+      { id: "B1", row: "B", number: "1", status: "available", type: "standard" },
+      { id: "B2", row: "B", number: "2", status: "available", type: "standard" },
+      { id: "B3", row: "B", number: "3", status: "available", type: "standard" },
+      { id: "B4", row: "B", number: "4", status: "reserved", type: "standard" },
+      { id: "B5", row: "B", number: "5", status: "reserved", type: "standard" },
+      { id: "B6", row: "B", number: "6", status: "available", type: "standard" },
+      { id: "B7", row: "B", number: "7", status: "available", type: "standard" },
+      { id: "B8", row: "B", number: "8", status: "available", type: "standard" },
+    ]
+  },
+  {
+    row: "C",
+    seats: [
+      { id: "C1", row: "C", number: "1", status: "available", type: "standard" },
+      { id: "C2", row: "C", number: "2", status: "available", type: "standard" },
+      { id: "C3", row: "C", number: "3", status: "available", type: "standard" },
+      { id: "C4", row: "C", number: "4", status: "available", type: "standard" },
+      { id: "C5", row: "C", number: "5", status: "available", type: "standard" },
+      { id: "C6", row: "C", number: "6", status: "available", type: "standard" },
+      { id: "C7", row: "C", number: "7", status: "available", type: "standard" },
+      { id: "C8", row: "C", number: "8", status: "available", type: "standard" },
+    ]
+  },
+  {
+    row: "D",
+    seats: [
+      { id: "D1", row: "D", number: "1", status: "available", type: "standard" },
+      { id: "D2", row: "D", number: "2", status: "available", type: "standard" },
+      { id: "D3", row: "D", number: "3", status: "available", type: "standard" },
+      { id: "D4", row: "D", number: "4", status: "available", type: "standard" },
+      { id: "D5", row: "D", number: "5", status: "available", type: "standard" },
+      { id: "D6", row: "D", number: "6", status: "available", type: "standard" },
+      { id: "D7", row: "D", number: "7", status: "available", type: "standard" },
+      { id: "D8", row: "D", number: "8", status: "available", type: "standard" },
+    ]
+  },
+  {
+    row: "E",
+    seats: [
+      { id: "E1", row: "E", number: "1", status: "available", type: "premium" },
+      { id: "E2", row: "E", number: "2", status: "available", type: "premium" },
+      { id: "E3", row: "E", number: "3", status: "available", type: "premium" },
+      { id: "E4", row: "E", number: "4", status: "available", type: "premium" },
+      { id: "E5", row: "E", number: "5", status: "available", type: "premium" },
+      { id: "E6", row: "E", number: "6", status: "available", type: "premium" },
+      { id: "E7", row: "E", number: "7", status: "available", type: "premium" },
+      { id: "E8", row: "E", number: "8", status: "available", type: "premium" },
+    ]
+  },
+  {
+    row: "F",
+    seats: [
+      { id: "F1", row: "F", number: "1", status: "available", type: "premium" },
+      { id: "F2", row: "F", number: "2", status: "available", type: "premium" },
+      { id: "F3", row: "F", number: "3", status: "reserved", type: "premium" },
+      { id: "F4", row: "F", number: "4", status: "reserved", type: "premium" },
+      { id: "F5", row: "F", number: "5", status: "reserved", type: "premium" },
+      { id: "F6", row: "F", number: "6", status: "available", type: "premium" },
+      { id: "F7", row: "F", number: "7", status: "available", type: "premium" },
+      { id: "F8", row: "F", number: "8", status: "available", type: "premium" },
+    ]
+  }
+];
+
+const Booking: React.FC = () => {
+  usePageViewMetrics();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  
-  // State
-  const [movie, setMovie] = useState<Movie | null>(null);
-  const [showtime, setShowtime] = useState<Showtime | null>(null);
-  const [theater, setTheater] = useState<Theater | null>(null);
-  const [screen, setScreen] = useState<Screen | null>(null);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   
-  useEffect(() => {
-    if (id) {
-      const showtimeData = getShowtimeById(id);
-      
-      if (showtimeData) {
-        setShowtime(showtimeData);
-        
-        const movieData = getMovieById(showtimeData.movieId);
-        if (movieData) {
-          setMovie(movieData);
-        }
-        
-        const theaterData = getTheaterById(showtimeData.theaterId);
-        if (theaterData) {
-          setTheater(theaterData);
-          const screenData = theaterData.screens.find(s => s.id === showtimeData.screenId);
-          if (screenData) {
-            setScreen(screenData);
-          }
-        }
-      }
-    }
-  }, [id]);
+  // Ticket prices
+  const standardPrice = 12;
+  const premiumPrice = 18;
   
-  const handleSeatSelection = (seats: string[]) => {
-    setSelectedSeats(seats);
-  };
-  
+  // Calculate total price
   const calculateTotal = () => {
-    if (!showtime || !screen) return 0;
-    
     let total = 0;
     selectedSeats.forEach(seatId => {
-      // Check if the seat is premium
-      const isPremium = screen.seatsLayout.some(row => 
-        row.seats.some(seat => seat.id === seatId && seat.type === 'premium')
-      );
-      
-      total += isPremium ? showtime.price.premium : showtime.price.standard;
+      // Find the seat in the layout
+      for (const row of sampleSeatsLayout) {
+        const seat = row.seats.find(s => s.id === seatId);
+        if (seat) {
+          total += seat.type === 'premium' ? premiumPrice : standardPrice;
+          break;
+        }
+      }
     });
-    
     return total;
   };
-  
-  const handleProceedToPayment = () => {
-    if (selectedSeats.length === 0) {
-      toast({
-        title: "No seats selected",
-        description: "Please select at least one seat to continue.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    // In a real app, this would navigate to a payment page
-    // For now, we'll just show a success toast
-    toast({
-      title: "Booking successful!",
-      description: `You have booked ${selectedSeats.length} seats for ${movie?.title}.`,
-    });
-    
-    // Navigate to a confirmation page or back to home
-    setTimeout(() => {
-      navigate('/');
-    }, 2000);
-  };
-  
-  if (!movie || !showtime || !theater || !screen) {
-    return (
-      <AppLayout>
-        <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold mb-4">Loading booking details...</h1>
-        </div>
-      </AppLayout>
-    );
-  }
 
   return (
-    <AppLayout>
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">Select Your Seats</h1>
+    <>
+      <Navbar />
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Select Seats</h1>
           
-          <div className="bg-card p-4 rounded-lg mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center">
-                <div className="mr-3 bg-muted rounded-md p-2">
-                  <CalendarIcon className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Date & Time</div>
-                  <div className="font-medium">
-                    {format(new Date(showtime.startTime), 'EEEE, MMMM d, yyyy')}
-                  </div>
-                  <div className="font-medium">
-                    {format(new Date(showtime.startTime), 'h:mm a')}
-                  </div>
-                </div>
+          {/* Movie Info */}
+          <div className="bg-card rounded-lg p-6 mb-8 border border-border/50">
+            <div className="flex items-center">
+              <div className="w-24 h-36 overflow-hidden rounded-md mr-4">
+                <img 
+                  src={sampleMovie.posterUrl} 
+                  alt={sampleMovie.title} 
+                  className="w-full h-full object-cover"
+                />
               </div>
-              
-              <div className="flex items-center">
-                <div className="mr-3 bg-muted rounded-md p-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Theater</div>
-                  <div className="font-medium">{theater.name}</div>
-                  <div className="text-sm">{screen.name}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center">
-                <div className="mr-3 bg-muted rounded-md p-2">
-                  <User className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Movie</div>
-                  <div className="font-medium">{movie.title}</div>
-                  <div className="text-sm">{movie.duration} min</div>
+              <div>
+                <h2 className="text-xl font-semibold mb-2">{sampleMovie.title}</h2>
+                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-1" />
+                    <span>Oct 25, 2023</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-1" />
+                    <span>7:30 PM</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Film className="h-4 w-4 mr-1" />
+                    <span>Screen 1</span>
+                  </div>
+                  <div className="flex items-center">
+                    <MapPin className="h-4 w-4 mr-1" />
+                    <span>CineBooker IMAX</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <SeatMap 
-              seatsLayout={screen.seatsLayout} 
-              onSelectSeats={handleSeatSelection} 
-            />
+          
+          {/* Seat Selection */}
+          <div className="bg-card rounded-lg p-6 mb-8 border border-border/50">
+            <h2 className="text-xl font-semibold mb-4">Choose Your Seats</h2>
+            <SeatMap seatsLayout={sampleSeatsLayout} onSelectSeats={setSelectedSeats} />
           </div>
           
-          <div>
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4">Booking Summary</h3>
-                
-                <div className="space-y-4 mb-6">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Movie</span>
-                    <span className="font-medium">{movie.title}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Date</span>
-                    <span>{format(new Date(showtime.startTime), 'MMM d, yyyy')}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Time</span>
-                    <span>{format(new Date(showtime.startTime), 'h:mm a')}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Theater</span>
-                    <span>{theater.name} - {screen.name}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Seats</span>
-                    <span>
-                      {selectedSeats.length > 0 
-                        ? selectedSeats.join(', ') 
-                        : 'None selected'}
-                    </span>
-                  </div>
-                  
-                  <div className="border-t border-border pt-4">
-                    <div className="flex justify-between items-center">
-                      <span className="font-semibold">Total Amount</span>
-                      <span className="text-xl font-bold">
-                        ${calculateTotal().toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <Button 
-                  className="w-full" 
-                  disabled={selectedSeats.length === 0}
-                  onClick={handleProceedToPayment}
-                >
-                  <CreditCard className="mr-2 h-5 w-5" />
-                  Proceed to Payment
-                </Button>
-              </CardContent>
-            </Card>
+          {/* Booking Summary */}
+          <div className="bg-card rounded-lg p-6 border border-border/50">
+            <h2 className="text-xl font-semibold mb-4">Booking Summary</h2>
+            
+            <div className="space-y-4 mb-6">
+              <div className="flex justify-between">
+                <span>Selected Seats:</span>
+                <span>{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None'}</span>
+              </div>
+              
+              <div className="flex justify-between">
+                <span>Standard Seats:</span>
+                <span>${standardPrice.toFixed(2)} x {selectedSeats.filter(seatId => {
+                  for (const row of sampleSeatsLayout) {
+                    const seat = row.seats.find(s => s.id === seatId);
+                    if (seat && seat.type === 'standard') return true;
+                  }
+                  return false;
+                }).length}</span>
+              </div>
+              
+              <div className="flex justify-between">
+                <span>Premium Seats:</span>
+                <span>${premiumPrice.toFixed(2)} x {selectedSeats.filter(seatId => {
+                  for (const row of sampleSeatsLayout) {
+                    const seat = row.seats.find(s => s.id === seatId);
+                    if (seat && seat.type === 'premium') return true;
+                  }
+                  return false;
+                }).length}</span>
+              </div>
+              
+              <div className="flex justify-between">
+                <span>Booking Fee:</span>
+                <span>$1.50</span>
+              </div>
+              
+              <div className="border-t pt-4 flex justify-between font-semibold">
+                <span>Total:</span>
+                <span>${(calculateTotal() + 1.50).toFixed(2)}</span>
+              </div>
+            </div>
+            
+            <Button 
+              className="w-full flex items-center justify-center" 
+              size="lg"
+              disabled={selectedSeats.length === 0}
+            >
+              <Ticket className="mr-2 h-5 w-5" />
+              Proceed to Payment
+            </Button>
           </div>
         </div>
-      </div>
-    </AppLayout>
+      </main>
+      <Footer />
+    </>
   );
 };
 

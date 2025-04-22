@@ -1,31 +1,32 @@
-
 import React, { useEffect, useState } from 'react';
 import metricsService from '@/services/metricsService';
 
 const MetricsEndpoint: React.FC = () => {
-  const [metricsData, setMetricsData] = useState<string>("");
-  
+  const [metrics, setMetrics] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const metrics = await metricsService.getMetrics();
-        setMetricsData(metrics);
+        const metricsData = await metricsService.getMetrics();
+        setMetrics(metricsData);
       } catch (error) {
         console.error('Error fetching metrics:', error);
-        setMetricsData("Error fetching metrics");
+        setMetrics('Error fetching metrics');
+      } finally {
+        setLoading(false);
       }
     };
-    
+
     fetchMetrics();
   }, []);
-  
+
+  // This component renders plain text metrics in Prometheus format
+  // It's meant to be accessed programmatically, not viewed in a browser
   return (
-    <div>
-      <h1>Prometheus Metrics</h1>
-      <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '4px' }}>
-        {metricsData}
-      </pre>
-    </div>
+    <pre style={{ fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+      {loading ? 'Loading metrics...' : metrics}
+    </pre>
   );
 };
 

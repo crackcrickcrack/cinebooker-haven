@@ -1,93 +1,99 @@
-
 import React from 'react';
-import AppLayout from '@/components/layout/AppLayout';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import { usePageViewMetrics } from '@/hooks/usePageViewMetrics';
 
-const Terms = () => {
+const Terms: React.FC = () => {
+  usePageViewMetrics();
+
   return (
-    <AppLayout>
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-center">Terms of Service</h1>
-        
-        <div className="max-w-4xl mx-auto prose">
-          <p className="text-muted-foreground mb-6">
-            Last updated: April 4, 2025
-          </p>
+    <>
+      <Navbar />
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
+          <p className="text-muted-foreground mb-6">Last updated: {new Date().toLocaleDateString()}</p>
           
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">1. Acceptance of Terms</h2>
-            <p>
-              By accessing or using the CineBooker website, mobile application, or any of our services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
-            </p>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">2. Changes to Terms</h2>
-            <p>
-              We reserve the right to modify these terms at any time. We will provide notice of significant changes by posting an update on our website. Your continued use of our services following any changes constitutes your acceptance of the new terms.
-            </p>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">3. Account Registration</h2>
-            <p>
-              To access certain features of our service, you may need to create an account. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account. You agree to provide accurate and complete information when creating an account and to update your information to keep it accurate and current.
-            </p>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">4. Ticket Purchases</h2>
-            <p>
-              All ticket sales are final. Refunds or exchanges may be provided at our discretion in accordance with our refund policy. You are responsible for verifying the accuracy of your ticket purchase, including the movie title, showtime, date, and theater location before completing your transaction.
-            </p>
-            <p className="mt-2">
-              E-tickets must be presented at the theater, either printed or on a mobile device. We reserve the right to verify your identity when presenting tickets.
-            </p>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">5. Prohibited Conduct</h2>
-            <p>
-              You agree not to:
-            </p>
-            <ul className="list-disc pl-8 mt-2 space-y-1">
-              <li>Use our services for any illegal purpose or in violation of any laws</li>
-              <li>Attempt to interfere with or disrupt the operation of our services</li>
-              <li>Impersonate any person or entity or misrepresent your affiliation</li>
-              <li>Engage in any form of automated data collection without our prior consent</li>
-              <li>Share your account credentials with others or allow others to use your account</li>
-            </ul>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">6. Intellectual Property</h2>
-            <p>
-              All content included on our website and mobile applications, such as text, graphics, logos, images, and software, is the property of CineBooker or its content suppliers and is protected by copyright and other intellectual property laws.
-            </p>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">7. Limitation of Liability</h2>
-            <p>
-              To the maximum extent permitted by law, CineBooker shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your access to or use of, or inability to access or use, our services.
-            </p>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">8. Governing Law</h2>
-            <p>
-              These Terms shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law principles.
-            </p>
-          </section>
-          
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">9. Contact Information</h2>
-            <p>
-              If you have any questions about these Terms, please contact us at legal@cinebooker.com or through our Contact page.
-            </p>
-          </section>
+          <div className="space-y-8">
+            <section>
+              <h2 className="text-xl font-semibold mb-3">1. Introduction</h2>
+              <p className="text-muted-foreground">
+                Welcome to CineBooker. These Terms of Service govern your use of our website, mobile application, and services. By accessing or using CineBooker, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access the service.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">2. Definitions</h2>
+              <p className="text-muted-foreground mb-3">
+                Throughout these Terms, the following definitions apply:
+              </p>
+              <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+                <li><strong>"Service"</strong> refers to the CineBooker website, mobile application, and all related services.</li>
+                <li><strong>"User"</strong> refers to any individual who accesses or uses the Service.</li>
+                <li><strong>"Content"</strong> refers to all information displayed on the Service, including text, images, audio, video, and interactive features.</li>
+                <li><strong>"Booking"</strong> refers to the reservation of cinema tickets through the Service.</li>
+              </ul>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">3. User Accounts</h2>
+              <p className="text-muted-foreground mb-3">
+                When you create an account with us, you must provide accurate, complete, and current information. You are responsible for safeguarding the password and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account.
+              </p>
+              <p className="text-muted-foreground">
+                We reserve the right to disable any user account if, in our opinion, you have violated any provision of these Terms.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">4. Bookings and Payments</h2>
+              <p className="text-muted-foreground mb-3">
+                All bookings made through the Service are subject to availability. Prices for tickets and services are subject to change without notice. We reserve the right to refuse or cancel any booking at our discretion.
+              </p>
+              <p className="text-muted-foreground">
+                Payment for bookings must be made at the time of reservation. We use third-party payment processors and do not store your payment information. Your use of these payment services is subject to their respective terms of service.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">5. Cancellations and Refunds</h2>
+              <p className="text-muted-foreground">
+                Bookings may be canceled or modified up to 2 hours before the scheduled showtime. Refunds will be processed to the original payment method within 5-7 business days. Cancellations made less than 2 hours before the showtime are not eligible for refunds unless otherwise required by applicable law.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">6. Intellectual Property</h2>
+              <p className="text-muted-foreground">
+                The Service and its original content, features, and functionality are owned by CineBooker and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws. You may not reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or transmit any of the material on our Service without our prior written consent.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">7. Limitation of Liability</h2>
+              <p className="text-muted-foreground">
+                In no event shall CineBooker, its directors, employees, partners, agents, suppliers, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">8. Changes to Terms</h2>
+              <p className="text-muted-foreground">
+                We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className="text-xl font-semibold mb-3">9. Contact Us</h2>
+              <p className="text-muted-foreground">
+                If you have any questions about these Terms, please contact us at legal@cinebooker.com.
+              </p>
+            </section>
+          </div>
         </div>
-      </div>
-    </AppLayout>
+      </main>
+      <Footer />
+    </>
   );
 };
 
