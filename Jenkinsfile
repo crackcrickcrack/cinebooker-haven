@@ -9,7 +9,7 @@ pipeline {
         string(name: 'DOCKER_REGISTRY', defaultValue: 'docker.io', description: 'Docker registry')
         string(name: 'DOCKER_REPO', defaultValue: 'sandeepkalathil/cinebooker', description: 'Docker repository')
         string(name: 'SONAR_PROJECT_KEY', defaultValue: 'cinebooker', description: 'SonarQube project key')
-        string(name: 'ARGOCD_UPDATER_URL', defaultValue: 'http://argocd-image-updater.argocd:8080', description: 'ArgoCD Image Updater URL')
+        string(name: 'ARGOCD_UPDATER_URL', defaultValue: 'https://13.61.141.211:31504', description: 'ArgoCD Image Updater URL')
     }
 
     environment {
