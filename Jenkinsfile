@@ -49,6 +49,7 @@ pipeline {
                 docker {
                     image "${NODE_DOCKER_IMAGE}"
                     args '-u 0:0 -v /home/ubuntu/.npm:/root/.npm'
+                    reuseNode true
                 }
             }
             steps {
@@ -71,6 +72,7 @@ pipeline {
                 docker {
                     image "${NODE_DOCKER_IMAGE}"
                     args '-u 0:0 -v /home/ubuntu/.npm:/root/.npm'
+                    reuseNode true
                 }
             }
             steps {
@@ -87,6 +89,7 @@ pipeline {
                 docker {
                     image "${NODE_DOCKER_IMAGE}"
                     args '-u 0:0 -v /home/ubuntu/.npm:/root/.npm'
+                    reuseNode true
                 }
             }
             steps {
@@ -99,6 +102,7 @@ pipeline {
                 docker {
                     image 'sonarsource/sonar-scanner-cli:latest'
                     args '-v /home/ubuntu/.sonar:/root/.sonar'
+                    reuseNode true
                 }
             }
             steps {
