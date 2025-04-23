@@ -76,7 +76,7 @@ const upcomingMovies: Movie[] = [
 
 const ComingSoon: React.FC = () => {
   usePageViewMetrics();
-  const [movies] = useState<Movie[]>(upcomingMovies);
+  const [movies, setMovies] = useState<Movie[]>(upcomingMovies);
 
   return (
     <>
