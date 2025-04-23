@@ -10,28 +10,31 @@ export interface Movie {
   genres: string[];
   director: string;
   cast: string[];
-  trailerUrl?: string;
 }
 
 export interface Theater {
   id: string;
   name: string;
   location: string;
-  address: string;
-  screens: number;
-  amenities: string[];
-  imageUrl: string;
+  screens: Screen[];
+}
+
+export interface Screen {
+  id: string;
+  name: string;
+  capacity: number;
+  features: string[];
 }
 
 export interface Showtime {
   id: string;
   movieId: string;
   theaterId: string;
-  screen: string;
-  time: string;
+  screenId: string;
   date: string;
+  time: string;
   price: number;
-  seatsAvailable: number;
+  availableSeats: number;
 }
 
 export interface Booking {
@@ -43,20 +46,7 @@ export interface Booking {
   seats: string[];
   totalPrice: number;
   bookingDate: string;
-  status: 'confirmed' | 'cancelled' | 'pending';
-}
-
-export interface SeatRow {
-  row: string;
-  seats: Seat[];
-}
-
-export interface Seat {
-  id: string;
-  row: string;
-  number: string;
-  status: 'available' | 'reserved';
-  type: 'standard' | 'premium';
+  status: "confirmed" | "pending" | "cancelled";
 }
 
 export interface User {
@@ -64,17 +54,5 @@ export interface User {
   name: string;
   email: string;
   phone?: string;
-  bookings?: Booking[];
-}
-
-export interface Promotion {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  validFrom: string;
-  validTo: string;
-  discountType: 'percentage' | 'fixed';
-  discountValue: number;
-  code: string;
+  bookings: string[];
 }
