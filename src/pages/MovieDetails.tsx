@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -35,45 +35,6 @@ const sampleMovies: Movie[] = [
     genres: ["Drama"],
     director: "Frank Darabont",
     cast: ["Tim Robbins", "Morgan Freeman", "Bob Gunton"]
-  },
-  {
-    id: "3",
-    title: "The Dark Knight",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BMTk4ODQzNDY3Ml5BMl5BanBnXkFtZTcwODA0NTM4Nw@@._V1_.jpg",
-    synopsis: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-    rating: 9.0,
-    duration: 152,
-    releaseDate: "2008-07-18",
-    genres: ["Action", "Crime", "Drama"],
-    director: "Christopher Nolan",
-    cast: ["Christian Bale", "Heath Ledger", "Aaron Eckhart"]
-  },
-  {
-    id: "4",
-    title: "Pulp Fiction",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
-    synopsis: "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-    rating: 8.9,
-    duration: 154,
-    releaseDate: "1994-10-14",
-    genres: ["Crime", "Drama"],
-    director: "Quentin Tarantino",
-    cast: ["John Travolta", "Uma Thurman", "Samuel L. Jackson"]
-  },
-  {
-    id: "5",
-    title: "The Lord of the Rings: The Fellowship of the Ring",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BMTM5MTYyNTcxNl5BMl5BanBnXkFtZTcwOTg2Njc4Ng@@._V1_.jpg",
-    synopsis: "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.",
-    rating: 8.8,
-    duration: 178,
-    releaseDate: "2001-12-19",
-    genres: ["Action", "Adventure", "Drama"],
-    director: "Peter Jackson",
-    cast: ["Elijah Wood", "Ian McKellen", "Orlando Bloom"]
   }
 ];
 
@@ -81,37 +42,9 @@ const MovieDetails: React.FC = () => {
   usePageViewMetrics();
   const { id } = useParams<{ id: string }>();
   const [selectedDate, setSelectedDate] = useState<string>("2023-10-25");
-  const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
   
-  useEffect(() => {
-    // Find the movie by ID
-    const foundMovie = sampleMovies.find(m => m.id === id);
-    
-    if (foundMovie) {
-      setCurrentMovie(foundMovie);
-    } else {
-      // Fallback to the first movie if ID not found
-      setCurrentMovie(sampleMovies[0]);
-    }
-  }, [id]);
-  
-  // If movie is not loaded yet, show loading state
-  if (!currentMovie) {
-    return (
-      <>
-        <Navbar />
-        <div className="container mx-auto px-4 py-12 text-center">
-          <div className="animate-pulse">
-            <div className="h-8 bg-muted/30 rounded w-1/3 mx-auto mb-4"></div>
-            <div className="h-64 bg-muted/30 rounded mb-4"></div>
-            <div className="h-4 bg-muted/30 rounded w-2/3 mx-auto mb-2"></div>
-            <div className="h-4 bg-muted/30 rounded w-1/2 mx-auto"></div>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
+  // Find the movie by ID
+  const movie = sampleMovies.find(m => m.id === id) || sampleMovies[0];
   
   // Sample showtimes
   const showtimes = [
@@ -140,7 +73,7 @@ const MovieDetails: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
           <div 
             className="relative w-full h-[70vh] bg-cover bg-center"
-            style={{ backgroundImage: `url(${currentMovie.backdropUrl})` }}
+            style={{ backgroundImage: `url(${movie.backdropUrl})` }}
           >
             <div className="absolute inset-0 bg-black/30 z-0"></div>
             
@@ -149,8 +82,8 @@ const MovieDetails: React.FC = () => {
                 <div className="md:col-span-3 hidden md:block">
                   <div className="overflow-hidden rounded-lg shadow-2xl border border-white/10">
                     <img 
-                      src={currentMovie.posterUrl} 
-                      alt={currentMovie.title} 
+                      src={movie.posterUrl} 
+                      alt={movie.title} 
                       className="w-full h-auto"
                     />
                   </div>
@@ -158,7 +91,7 @@ const MovieDetails: React.FC = () => {
                 
                 <div className="md:col-span-9">
                   <div className="flex flex-wrap gap-2 mb-3">
-                    {currentMovie.genres.map((genre, index) => (
+                    {movie.genres.map((genre, index) => (
                       <Badge key={index} className="bg-primary/70 text-white hover:bg-primary">
                         {genre}
                       </Badge>
@@ -166,26 +99,26 @@ const MovieDetails: React.FC = () => {
                   </div>
                   
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2">
-                    {currentMovie.title}
+                    {movie.title}
                   </h1>
                   
                   <div className="flex items-center space-x-4 mb-4">
                     <div className="flex items-center">
                       <Star className="h-5 w-5 mr-1 fill-gold-400 text-gold-400" />
-                      <span className="text-white">{currentMovie.rating.toFixed(1)}/10</span>
+                      <span className="text-white">{movie.rating.toFixed(1)}/10</span>
                     </div>
                     <div className="flex items-center">
                       <Clock className="h-5 w-5 mr-1 text-white" />
-                      <span className="text-white">{currentMovie.duration} min</span>
+                      <span className="text-white">{movie.duration} min</span>
                     </div>
                     <div className="flex items-center">
                       <Calendar className="h-5 w-5 mr-1 text-white" />
-                      <span className="text-white">{currentMovie.releaseDate}</span>
+                      <span className="text-white">{movie.releaseDate}</span>
                     </div>
                   </div>
                   
                   <p className="text-white/90 mb-6 max-w-3xl">
-                    {currentMovie.synopsis}
+                    {movie.synopsis}
                   </p>
                   
                   <div className="flex flex-wrap gap-4">
@@ -209,13 +142,13 @@ const MovieDetails: React.FC = () => {
             <div className="md:col-span-2">
               <h2 className="text-2xl font-bold mb-4">Synopsis</h2>
               <p className="text-muted-foreground mb-8">
-                {currentMovie.synopsis}
+                {movie.synopsis}
               </p>
               
               <h2 className="text-2xl font-bold mb-4">Cast & Crew</h2>
               <div className="mb-8">
-                <p className="mb-2"><span className="font-medium">Director:</span> {currentMovie.director}</p>
-                <p><span className="font-medium">Cast:</span> {currentMovie.cast.join(', ')}</p>
+                <p className="mb-2"><span className="font-medium">Director:</span> {movie.director}</p>
+                <p><span className="font-medium">Cast:</span> {movie.cast.join(', ')}</p>
               </div>
             </div>
             
