@@ -32,9 +32,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       <div className="p-3">
         <h3 className="font-medium text-sm line-clamp-1">{movie.title}</h3>
         <div className="flex flex-wrap gap-1 mt-1">
-          {movie.genres.slice(0, 2).map((genre, index) => (
-            <span key={index} className="text-xs text-muted-foreground">
-              {genre}{index < Math.min(movie.genres.length, 2) - 1 ? ',' : ''}
+          {movie.genres.slice(0, 2).map((genre) => (
+            <span key={`${movie.id}-${genre}`} className="text-xs text-muted-foreground">
+              {genre}{movie.genres.indexOf(genre) < Math.min(movie.genres.length, 2) - 1 ? ',' : ''}
             </span>
           ))}
           {movie.genres.length > 2 && (
