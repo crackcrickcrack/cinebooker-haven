@@ -4,6 +4,7 @@ import Movies from '@/pages/Movies';
 import MovieDetails from '@/pages/MovieDetails';
 import Bookings from '@/pages/Bookings';
 import Contact from '@/pages/Contact';
+import ComingSoon from '@/pages/ComingSoon';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/movies/:id" element={<MovieDetails />} />
       <Route path="/bookings" element={<Bookings />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/coming-soon" element={<ComingSoon />} />
     </Routes>
   );
 }
