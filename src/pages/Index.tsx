@@ -136,9 +136,9 @@ const upcomingMovies: Movie[] = [
 
 const Index: React.FC = () => {
   usePageViewMetrics();
-  const [featuredMovie, setFeaturedMovie] = useState<Movie>(sampleMovies[0]);
-  const [nowShowingMovies, setNowShowingMovies] = useState<Movie[]>(sampleMovies.slice(0, 5));
-  const [comingSoonMovies, setComingSoonMovies] = useState<Movie[]>(upcomingMovies.slice(0, 4));
+  const [featuredMovie] = useState<Movie>(sampleMovies[0]);
+  const [nowShowingMovies] = useState<Movie[]>(sampleMovies.slice(0, 5));
+  const [comingSoonMovies] = useState<Movie[]>(upcomingMovies.slice(0, 4));
 
   return (
     <>
