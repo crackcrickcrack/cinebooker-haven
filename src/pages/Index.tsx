@@ -78,67 +78,10 @@ const sampleMovies: Movie[] = [
   }
 ];
 
-// Sample upcoming movies data
-const upcomingMovies: Movie[] = [
-  {
-    id: "upcoming-1",
-    title: "Dune: Part Two",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BODI0YjNhNjUtYjM0My00MTUwLWFlYTMtMWI2NGUzYjNjNGQzXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BODI0YjNhNjUtYjM0My00MTUwLWFlYTMtMWI2NGUzYjNjNGQzXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg",
-    synopsis: "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.",
-    rating: 8.7,
-    duration: 166,
-    releaseDate: "2024-03-01",
-    genres: ["Action", "Adventure", "Sci-Fi"],
-    director: "Denis Villeneuve",
-    cast: ["Timothée Chalamet", "Zendaya", "Rebecca Ferguson"]
-  },
-  {
-    id: "upcoming-2",
-    title: "Furiosa: A Mad Max Saga",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BNmFlMjcwODgtZGE4MC00MDUxLWJiN2MtNDVlYjg1NTkyZTRkXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BNmFlMjcwODgtZGE4MC00MDUxLWJiN2MtNDVlYjg1NTkyZTRkXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
-    synopsis: "The origin story of renegade warrior Furiosa before she teamed up with Mad Max in 'Fury Road'.",
-    rating: 8.5,
-    duration: 150,
-    releaseDate: "2024-05-24",
-    genres: ["Action", "Adventure", "Sci-Fi"],
-    director: "George Miller",
-    cast: ["Anya Taylor-Joy", "Chris Hemsworth", "Tom Burke"]
-  },
-  {
-    id: "upcoming-3",
-    title: "Gladiator II",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BZjYzZDgzMmYtYjY5Zi00YTk1LThhMDYtNjFlNzM4MTZhYzgyXkEyXkFqcGdeQXVyMTA5ODEyNTc5._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BZjYzZDgzMmYtYjY5Zi00YTk1LThhMDYtNjFlNzM4MTZhYzgyXkEyXkFqcGdeQXVyMTA5ODEyNTc5._V1_.jpg",
-    synopsis: "A sequel to the 2000 film Gladiator, following a new character in ancient Rome.",
-    rating: 8.3,
-    duration: 155,
-    releaseDate: "2024-11-22",
-    genres: ["Action", "Drama", "History"],
-    director: "Ridley Scott",
-    cast: ["Paul Mescal", "Denzel Washington", "Pedro Pascal"]
-  },
-  {
-    id: "upcoming-4",
-    title: "Deadpool & Wolverine",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BMDdjODAwOTEtOWU4Yi00ZTY1LWIyZWYtN2JjMjNjOTllZWYzXkEyXkFqcGdeQXVyMTMzNzIyNDc1._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BMDdjODAwOTEtOWU4Yi00ZTY1LWIyZWYtN2JjMjNjOTllZWYzXkEyXkFqcGdeQXVyMTMzNzIyNDc1._V1_.jpg",
-    synopsis: "Wolverine joins forces with the loudmouthed mercenary Deadpool for an adventure across the multiverse.",
-    rating: 8.9,
-    duration: 127,
-    releaseDate: "2024-07-26",
-    genres: ["Action", "Adventure", "Comedy"],
-    director: "Shawn Levy",
-    cast: ["Ryan Reynolds", "Hugh Jackman", "Emma Corrin"]
-  }
-];
-
 const Index: React.FC = () => {
   usePageViewMetrics();
   const [featuredMovie] = useState<Movie>(sampleMovies[0]);
   const [nowShowingMovies] = useState<Movie[]>(sampleMovies.slice(0, 5));
-  const [comingSoonMovies] = useState<Movie[]>(upcomingMovies.slice(0, 4));
 
   return (
     <>
@@ -191,8 +134,9 @@ const Index: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {comingSoonMovies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+            {/* Using the same movies for demo purposes */}
+            {nowShowingMovies.slice(0, 4).map((movie) => (
+              <MovieCard key={`coming-${movie.id}`} movie={{...movie, id: `coming-${movie.id}`}} />
             ))}
           </div>
         </section>
