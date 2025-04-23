@@ -20,6 +20,7 @@ spec:
       labels:
         app: cinebooker
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: cinebooker
         image: docker.io/sandeepkalathil/cinebooker:latest
