@@ -82,15 +82,6 @@
     --sidebar-border: 217.2 32.6% 17.5%;
     --sidebar-ring: 224.3 76.3% 48%;
   }
-
-  /* Set dark mode as default */
-  :root {
-    color-scheme: dark;
-  }
-
-  html {
-    @apply dark;
-  }
 }
 
 @layer base {

@@ -1,9 +1,9 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { FilmIcon, SearchIcon, UserIcon, TicketIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { ThemeToggle } from '@/components/theme/theme-toggle';
 
 const Navbar = () => {
   return (
@@ -40,7 +40,6 @@ const Navbar = () => {
               />
               <SearchIcon className="absolute right-2 top-2.5 h-4 w-4 text-muted-foreground" />
             </div>
-            <ThemeToggle />
             <Link to="/bookings">
               <Button variant="ghost" size="icon" className="rounded-full">
                 <TicketIcon className="h-5 w-5" />

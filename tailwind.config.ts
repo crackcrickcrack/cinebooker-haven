@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 // Fix: Use import instead of require
 import tailwindcssAnimate from "tailwindcss-animate";
