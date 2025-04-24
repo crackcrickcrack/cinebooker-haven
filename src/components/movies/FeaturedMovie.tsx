@@ -1,3 +1,4 @@
+import React from 'react';
 import { Movie } from '@/types/cinema';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon, Clock, Star, PlayCircle } from 'lucide-react';
@@ -15,6 +16,7 @@ const FeaturedMovie: React.FC<FeaturedMovieProps> = ({ movie }) => {
       <div 
         className="relative w-full h-[70vh] bg-cover bg-center"
         style={{ backgroundImage: `url(${movie.backdropUrl})` }}
+        aria-label={`${movie.title} backdrop`}
       >
         <div className="absolute inset-0 bg-black/30 z-0"></div>
         
@@ -24,7 +26,7 @@ const FeaturedMovie: React.FC<FeaturedMovieProps> = ({ movie }) => {
               <div className="overflow-hidden rounded-lg shadow-2xl border border-white/10">
                 <img 
                   src={movie.posterUrl} 
-                  alt={movie.title} 
+                  alt={`${movie.title} poster`} 
                   className="w-full h-auto"
                 />
               </div>
@@ -43,7 +45,7 @@ const FeaturedMovie: React.FC<FeaturedMovieProps> = ({ movie }) => {
                 {movie.title}
               </h1>
               
-              <div className="flex items-center space-x-4 mb-4">
+              <div className="flex flex-wrap items-center space-x-4 mb-4">
                 <div className="flex items-center">
                   <Star className="h-5 w-5 mr-1 fill-gold-400 text-gold-400" />
                   <span className="text-white">{movie.rating.toFixed(1)}/10</span>
@@ -63,12 +65,17 @@ const FeaturedMovie: React.FC<FeaturedMovieProps> = ({ movie }) => {
               </p>
               
               <div className="flex flex-wrap gap-4">
-                <Link to={`/movies/${movie.id}/booking`}>
-                  <Button size="lg" className="bg-primary hover:bg-primary/90">
+                <Button size="lg" className="bg-primary hover:bg-primary/90" asChild>
+                  <Link to={`/movies/${movie.id}/booking`}>
                     Book Tickets
-                  </Button>
-                </Link>
-                <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10">
+                  </Link>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white/50 text-white hover:bg-white/10"
+                  onClick={() => window.open(movie.trailerUrl || '#', '_blank')}
+                >
                   <PlayCircle className="mr-2 h-5 w-5" />
                   Watch Trailer
                 </Button>
