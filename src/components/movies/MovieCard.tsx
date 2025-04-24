@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Movie } from '@/types/cinema';
@@ -11,9 +10,13 @@ interface MovieCardProps {
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
-    <Link to={`/movies/${movie.id}`} className="movie-card">
-      <div className="movie-poster">
-        <img src={movie.posterUrl} alt={movie.title} />
+    <Link to={`/movies/${movie.id}`} className="group block rounded-lg overflow-hidden border border-border/50 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="relative overflow-hidden">
+        <img 
+          src={movie.posterUrl} 
+          alt={`${movie.title} poster`} 
+          className="w-full aspect-[2/3] object-cover transition-transform duration-300 group-hover:scale-105"
+        />
         <div className="absolute top-2 right-2">
           <Badge variant="secondary" className="bg-black/70 text-white border-0">
             <Star className="h-3 w-3 mr-1 fill-gold-400 text-gold-400" />

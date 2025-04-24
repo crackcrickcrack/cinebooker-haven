@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -7,44 +7,23 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, Star, PlayCircle, CalendarDays } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { usePageViewMetrics } from '@/hooks/usePageViewMetrics';
-
-// Sample movie data
-const sampleMovies: Movie[] = [
-  {
-    id: "1",
-    title: "Inception",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
-    synopsis: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-    rating: 8.8,
-    duration: 148,
-    releaseDate: "2010-07-16",
-    genres: ["Action", "Adventure", "Sci-Fi"],
-    director: "Christopher Nolan",
-    cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Ellen Page"]
-  },
-  {
-    id: "2",
-    title: "The Shawshank Redemption",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
-    backdropUrl: "https://m.media-amazon.com/images/M/MV5BNTYxOTYyMzE3NV5BMl5BanBnXkFtZTcwOTMxNDY3Mw@@._V1_.jpg",
-    synopsis: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-    rating: 9.3,
-    duration: 142,
-    releaseDate: "1994-10-14",
-    genres: ["Drama"],
-    director: "Frank Darabont",
-    cast: ["Tim Robbins", "Morgan Freeman", "Bob Gunton"]
-  }
-];
+import { getMovieById } from '@/data/mockData';
 
 const MovieDetails: React.FC = () => {
   usePageViewMetrics();
   const { id } = useParams<{ id: string }>();
   const [selectedDate, setSelectedDate] = useState<string>("2023-10-25");
+  const [movie, setMovie] = useState<Movie | null>(null);
   
-  // Find the movie by ID
-  const movie = sampleMovies.find(m => m.id === id) || sampleMovies[0];
+  useEffect(() => {
+    // Get the movie by ID from our mock data
+    if (id) {
+      const foundMovie = getMovieById(id);
+      if (foundMovie) {
+        setMovie(foundMovie);
+      }
+    }
+  }, [id]);
   
   // Sample showtimes
   const showtimes = [
@@ -63,6 +42,24 @@ const MovieDetails: React.FC = () => {
     { date: "2023-10-28", day: "Sat" },
     { date: "2023-10-29", day: "Sun" }
   ];
+
+  if (!movie) {
+    return (
+      <>
+        <Navbar />
+        <main className="container mx-auto px-4 py-12">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">Movie not found</h1>
+            <p className="mt-4">The movie you're looking for doesn't exist or has been removed.</p>
+            <Button className="mt-6" asChild>
+              <Link to="/movies">Browse Movies</Link>
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
