@@ -10,14 +10,15 @@ import "./App.css"
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="cinebooker-theme">
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/movies/:id" element={<MovieDetails />} />
-        <Route path="/movies/:id/booking" element={<MovieDetails />} />
-        <Route path="/promotions" element={<Promotions />} />
-        <Route path="/coming-soon" element={<ComingSoon />} />
-        <Route path="/bookings" element={<Bookings />} />
-      </Routes>
+      <div className="min-h-screen bg-background text-foreground">
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/movies/:id" element={<MovieDetails />} />
+          <Route path="/promotions" element={<Promotions />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/bookings" element={<Bookings />} />
+        </Routes>
+      </div>
     </ThemeProvider>
   )
 }

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, Star, PlayCircle, CalendarDays } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { usePageViewMetrics } from '@/hooks/usePageViewMetrics';
-import { getMovieById, movies } from '@/data/mockData';
+import { getMovieById } from '@/data/mockData';
 
 const MovieDetails: React.FC = () => {
   usePageViewMetrics();

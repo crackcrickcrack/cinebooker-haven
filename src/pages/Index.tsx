@@ -37,7 +37,7 @@ const Index: React.FC = () => {
     }
   }, []);
 
-  if (loading || !featuredMovie) {
+  if (loading) {
     return (
       <>
         <Navbar />
@@ -54,13 +54,13 @@ const Index: React.FC = () => {
       <Navbar />
       <main>
         {/* Hero Section with Featured Movie */}
-        <FeaturedMovie movie={featuredMovie} />
+        {featuredMovie && <FeaturedMovie movie={featuredMovie} />}
         
         {/* Now Showing Section */}
         <section className="container mx-auto px-4 py-12">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Now Showing</h2>
-            <Link to="/movies" className="flex items-center text-primary hover:underline">
+            <Link to="/" className="flex items-center text-primary hover:underline">
               View All <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </div>

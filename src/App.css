@@ -1,6 +1,8 @@
 /* App-specific styles */
 body {
   min-height: 100vh;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 /* Fix for movie links */
@@ -12,4 +14,9 @@ body {
 /* Ensure dark mode is applied */
 :root {
   color-scheme: dark;
+}
+
+html, body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }

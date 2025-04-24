@@ -18,3 +18,5 @@ export const usePageViewMetrics = () => {
     
   }, [location.pathname]);
 };
+
+export default usePageViewMetrics;

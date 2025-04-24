@@ -55,6 +55,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    color-scheme: dark;
   }
 }
 
@@ -73,4 +74,14 @@
 
 .movie-card:hover .movie-poster img {
   @apply scale-105;
+}
+
+/* Fix for dark mode */
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
