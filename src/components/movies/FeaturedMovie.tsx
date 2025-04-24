@@ -47,15 +47,15 @@ const FeaturedMovie: React.FC<FeaturedMovieProps> = ({ movie }) => {
               
               <div className="flex flex-wrap items-center space-x-4 mb-4">
                 <div className="flex items-center">
-                  <Star className="h-5 w-5 mr-1 fill-gold-400 text-gold-400" />
+                  <Star className="h-5 w-5 mr-1 fill-yellow-400 text-yellow-400" aria-hidden="true" />
                   <span className="text-white">{movie.rating.toFixed(1)}/10</span>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-1 text-white" />
+                  <Clock className="h-5 w-5 mr-1 text-white" aria-hidden="true" />
                   <span className="text-white">{movie.duration} min</span>
                 </div>
                 <div className="flex items-center">
-                  <CalendarIcon className="h-5 w-5 mr-1 text-white" />
+                  <CalendarIcon className="h-5 w-5 mr-1 text-white" aria-hidden="true" />
                   <span className="text-white">{movie.releaseDate}</span>
                 </div>
               </div>
@@ -74,9 +74,9 @@ const FeaturedMovie: React.FC<FeaturedMovieProps> = ({ movie }) => {
                   size="lg" 
                   variant="outline" 
                   className="border-white/50 text-white hover:bg-white/10"
-                  onClick={() => window.open(movie.trailerUrl || '#', '_blank')}
+                  onClick={() => movie.trailerUrl && window.open(movie.trailerUrl, '_blank')}
                 >
-                  <PlayCircle className="mr-2 h-5 w-5" />
+                  <PlayCircle className="mr-2 h-5 w-5" aria-hidden="true" />
                   Watch Trailer
                 </Button>
               </div>

@@ -21,10 +21,10 @@ const Navbar = () => {
               <span className="font-bold text-lg md:text-xl">CineBooker</span>
             </Link>
             <nav className="hidden md:flex items-center space-x-6 ml-10">
-              <Link to="/movies" className="text-foreground/80 hover:text-foreground transition-colors">
+              <Link to="/" className="text-foreground/80 hover:text-foreground transition-colors">
                 Movies
               </Link>
-              <Link to="/theaters" className="text-foreground/80 hover:text-foreground transition-colors">
+              <Link to="/" className="text-foreground/80 hover:text-foreground transition-colors">
                 Theaters
               </Link>
               <Link to="/coming-soon" className="text-foreground/80 hover:text-foreground transition-colors">
@@ -51,7 +51,7 @@ const Navbar = () => {
                 <TicketIcon className="h-5 w-5" aria-hidden="true" />
               </Button>
             </Link>
-            <Link to="/login">
+            <Link to="/">
               <Button variant="default" className="rounded-full">
                 <UserIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                 Sign In
@@ -74,14 +74,14 @@ const Navbar = () => {
           <div className="md:hidden py-4 border-t border-border/50">
             <nav className="flex flex-col space-y-4">
               <Link 
-                to="/movies" 
+                to="/" 
                 className="text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Movies
               </Link>
               <Link 
-                to="/theaters" 
+                to="/" 
                 className="text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >

@@ -15,27 +15,34 @@ const Index: React.FC = () => {
   const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
   const [nowShowingMovies, setNowShowingMovies] = useState<Movie[]>([]);
   const [comingSoonMovies, setComingSoonMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Get movies from mock data
-    if (movies && movies.length > 0) {
-      // Set featured movie (first movie)
-      setFeaturedMovie(movies[0]);
-      
-      // Set now showing movies (first 5 movies)
-      setNowShowingMovies(movies.slice(0, 5));
-      
-      // Set coming soon movies (next 4 movies)
-      setComingSoonMovies(movies.slice(5, 9));
+    try {
+      // Get movies from mock data
+      if (movies && movies.length > 0) {
+        // Set featured movie (first movie)
+        setFeaturedMovie(movies[0]);
+        
+        // Set now showing movies (first 6 movies)
+        setNowShowingMovies(movies.slice(0, 6));
+        
+        // Set coming soon movies (next 4 movies)
+        setComingSoonMovies(movies.slice(7, 11));
+      }
+    } catch (error) {
+      console.error("Error loading movies:", error);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
-  if (!featuredMovie) {
+  if (loading || !featuredMovie) {
     return (
       <>
         <Navbar />
         <main className="container mx-auto px-4 py-8">
-          <p>Loading...</p>
+          <p className="text-center py-12">Loading movies...</p>
         </main>
         <Footer />
       </>
@@ -54,7 +61,7 @@ const Index: React.FC = () => {
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Now Showing</h2>
             <Link to="/movies" className="flex items-center text-primary hover:underline">
-              View All <ArrowRight className="ml-1 h-4 w-4" />
+              View All <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
           
@@ -78,7 +85,11 @@ const Index: React.FC = () => {
                   <Link to="/promotions">View Offers</Link>
                 </Button>
               </div>
-              <div className="absolute right-0 top-0 h-full w-1/3 bg-[url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80')] bg-cover bg-center opacity-25 md:opacity-75"></div>
+              <div 
+                className="absolute right-0 top-0 h-full w-1/3 bg-cover bg-center opacity-25 md:opacity-75"
+                style={{backgroundImage: "url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80')"}}
+                aria-hidden="true"
+              ></div>
             </div>
           </div>
         </section>
@@ -88,7 +99,7 @@ const Index: React.FC = () => {
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Coming Soon</h2>
             <Link to="/coming-soon" className="flex items-center text-primary hover:underline">
-              View All <ArrowRight className="ml-1 h-4 w-4" />
+              View All <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
           
