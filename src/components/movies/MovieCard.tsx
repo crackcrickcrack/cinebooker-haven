@@ -39,12 +39,12 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           </div>
 
           <div className="mt-2 flex flex-wrap gap-1">
-            {movie.genres.slice(0, 2).map((genre, index) => (
+            {(movie.genres ?? []).slice(0, 2).map((genre, index) => (
               <Badge key={index} variant="outline" className="text-xs">
                 {genre}
               </Badge>
             ))}
-            {movie.genres.length > 2 && (
+            {movie.genres && movie.genres.length > 2 && (
               <Badge variant="outline" className="text-xs">
                 +{movie.genres.length - 2}
               </Badge>
