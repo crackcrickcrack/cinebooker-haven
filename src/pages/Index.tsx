@@ -8,25 +8,28 @@ import { ArrowRight } from 'lucide-react';
 import FeaturedMovie from '@/components/movies/FeaturedMovie';
 import MovieCard from '@/components/movies/MovieCard';
 import { usePageViewMetrics } from '@/hooks/usePageViewMetrics';
-import { movies, comingSoonMovies } from '@/data/mockData';
+import { movies } from '@/data/mockData';
 
 const Index: React.FC = () => {
   usePageViewMetrics();
   const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
   const [nowShowingMovies, setNowShowingMovies] = useState<Movie[]>([]);
-  const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
+  const [comingSoonMovies, setComingSoonMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     try {
-      // Set featured movie (first movie)
-      setFeaturedMovie(movies[0]);
-      
-      // Set now showing movies (first 6 movies)
-      setNowShowingMovies(movies.slice(0, 6));
-      
-      // Set coming soon movies
-      setUpcomingMovies(comingSoonMovies.slice(0, 4));
+      // Get movies from mock data
+      if (movies && movies.length > 0) {
+        // Set featured movie (first movie)
+        setFeaturedMovie(movies[0]);
+        
+        // Set now showing movies (first 6 movies)
+        setNowShowingMovies(movies.slice(0, 6));
+        
+        // Set coming soon movies (next 4 movies)
+        setComingSoonMovies(movies.slice(7, 11));
+      }
     } catch (error) {
       console.error("Error loading movies:", error);
     } finally {
@@ -62,7 +65,7 @@ const Index: React.FC = () => {
             </Link>
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {nowShowingMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
@@ -100,8 +103,8 @@ const Index: React.FC = () => {
             </Link>
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6">
-            {upcomingMovies.map((movie) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            {comingSoonMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>
