@@ -1,55 +1,36 @@
 export interface Movie {
   id: string;
   title: string;
-  posterUrl: string;
-  backdropUrl: string;
-  releaseDate: string;
-  duration: number;
-  rating: number;
-  genres: string[];
   synopsis: string;
   director: string;
   cast: string[];
+  genres: string[];
+  duration: number;
+  rating: number;
+  releaseDate: string;
+  posterUrl: string;
+  backdropUrl: string;
   trailerUrl?: string;
 }
 
 export interface Theater {
   id: string;
   name: string;
-  location: string;
-  screens: Screen[];
-}
-
-export interface Screen {
-  id: string;
-  name: string;
+  address: string;
+  image: string;
   features: string[];
-  seatsLayout: SeatRow[];
-}
-
-export interface SeatRow {
-  row: string;
-  seats: Seat[];
-}
-
-export interface Seat {
-  id: string;
-  number: number;
-  type: 'standard' | 'premium';
-  status: 'available' | 'reserved' | 'booked';
+  screens: number;
+  rating: number;
 }
 
 export interface Showtime {
   id: string;
   movieId: string;
   theaterId: string;
-  screenId: string;
-  startTime: string;
-  endTime: string;
-  price: {
-    standard: number;
-    premium: number;
-  };
+  screen: string;
+  date: string;
+  time: string;
+  availableSeats: number;
 }
 
 export interface Booking {
@@ -61,7 +42,7 @@ export interface Booking {
   seats: string[];
   totalPrice: number;
   bookingDate: string;
-  status: 'confirmed' | 'pending' | 'cancelled';
+  status: "confirmed" | "cancelled" | "pending";
 }
 
 export interface Promotion {
@@ -71,7 +52,14 @@ export interface Promotion {
   imageUrl: string;
   validFrom: string;
   validTo: string;
-  discountType: 'percentage' | 'fixed';
+  discountType: "percentage" | "fixed";
   discountValue: number;
   code: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  profilePicture?: string;
 }
