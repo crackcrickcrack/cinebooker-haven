@@ -203,7 +203,7 @@ export const comingSoonMovies: Movie[] = [
     duration: 160,
     rating: 8.0,
     releaseDate: "2024-11-22",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BNWZkODI5MjgtNzRmNS00NTgyLWEzODMtYWVjMmYyNWVlNzY0XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
+    posterUrl: "https://deadline.com/wp-content/uploads/2023/09/gladiator-2-first-look.jpg",
     backdropUrl: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80",
     trailerUrl: "https://www.youtube.com/watch?v=6aIUAa7A2Vc"
   },
@@ -217,7 +217,7 @@ export const comingSoonMovies: Movie[] = [
     duration: 150,
     rating: 8.2,
     releaseDate: "2024-05-24",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BNmYzNGZjOTMtNjQ5MS00NTc0LWEzZjItNmVhYTAyZDg3MTRiXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
+    posterUrl: "https://deadline.com/wp-content/uploads/2023/05/furiosa-a-mad-max-saga-poster.jpg",
     backdropUrl: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80",
     trailerUrl: "https://www.youtube.com/watch?v=XdKzUbAiswE"
   },
@@ -231,7 +231,7 @@ export const comingSoonMovies: Movie[] = [
     duration: 140,
     rating: 7.9,
     releaseDate: "2024-10-04",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BODUyODM1OGEtNTY3ZC00OTFjLTkyNDgtODU4YzRmZGM0NjdkXkEyXkFqcGdeQXVyNjczMzgwMDg@._V1_.jpg",
+    posterUrl: "https://deadline.com/wp-content/uploads/2023/04/joker-2.jpg",
     backdropUrl: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80",
     trailerUrl: "https://www.youtube.com/watch?v=03ymBj144ng"
   }
