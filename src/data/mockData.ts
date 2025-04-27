@@ -203,7 +203,7 @@ export const comingSoonMovies: Movie[] = [
     duration: 110,
     rating: 8.0,
     releaseDate: "2024-06-14",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BOTMyMjEyNDktYjBkOC00YTkxLWE4ZTgtZDI2YTcxZDc3NzkzXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
+    posterUrl: "https://image.tmdb.org/t/p/original/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
     backdropUrl: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1025&q=80",
     trailerUrl: "https://www.youtube.com/watch?v=VrTx91XgRIQ"
   },
