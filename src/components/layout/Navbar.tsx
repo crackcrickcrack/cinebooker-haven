@@ -51,7 +51,7 @@ const Navbar = () => {
                 <TicketIcon className="h-5 w-5" aria-hidden="true" />
               </Button>
             </Link>
-            <Link to="/">
+            <Link to="/login">
               <Button variant="default" className="rounded-full">
                 <UserIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                 Sign In
