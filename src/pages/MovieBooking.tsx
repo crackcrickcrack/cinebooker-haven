@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -10,7 +10,7 @@ import { getMovieById } from '@/data/mockData';
 const MovieBooking: React.FC = () => {
   usePageViewMetrics();
   const { id } = useParams<{ id: string }>();
-  const movie = id ? getMovieById(id) : null;
+  const [movie, setMovie] = useState(id ? getMovieById(id) : null);
   
   const [selectedDate, setSelectedDate] = useState('2023-10-25');
   const [selectedTime, setSelectedTime] = useState('7:30 PM');
