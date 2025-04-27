@@ -13,6 +13,7 @@ import Contact from "@/pages/Contact"
 import Terms from "@/pages/Terms"
 import Privacy from "@/pages/Privacy"
 import FAQ from "@/pages/FAQ"
+import Theaters from "@/pages/Theaters"
 import "./App.css"
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/theaters" element={<Theaters />} />
         </Routes>
       </div>
     </ThemeProvider>

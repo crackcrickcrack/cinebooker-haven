@@ -24,7 +24,7 @@ const Navbar = () => {
               <Link to="/" className="text-foreground/80 hover:text-foreground transition-colors">
                 Movies
               </Link>
-              <Link to="/" className="text-foreground/80 hover:text-foreground transition-colors">
+              <Link to="/theaters" className="text-foreground/80 hover:text-foreground transition-colors">
                 Theaters
               </Link>
               <Link to="/coming-soon" className="text-foreground/80 hover:text-foreground transition-colors">
@@ -81,7 +81,7 @@ const Navbar = () => {
                 Movies
               </Link>
               <Link 
-                to="/" 
+                to="/theaters" 
                 className="text-foreground/80 hover:text-foreground transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
